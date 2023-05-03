@@ -1,6 +1,7 @@
 import settings from "./settings_fill.svg";
 import "./feed.sass";
-import NewsList from "../newsList/NewsList";
+import ContentList from "../contentList/ContentList";
+import {Link} from "react-router-dom";
 
 const Feed = ({isLogged}) => {
 
@@ -16,10 +17,14 @@ const Feed = ({isLogged}) => {
                 </div>
             </div>
             <div className="news">
-                <NewsList />
+                <Link 
+                    className="content__title" ><h2>Последние новости</h2></Link>
+                <ContentList type="news"/>
             </div>
             <div className="events">
-
+                <Link 
+                    className="content__title" ><h2>Последние новости</h2></Link>
+                <ContentList type="events"/>
             </div>
             <div className="disscussions">
 
