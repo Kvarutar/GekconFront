@@ -1,9 +1,18 @@
+@import "../../styles/variables"
+    
 .content
     &__wrapper
         display: grid
         grid-template-columns: repeat(3, 1fr)
         column-gap: 21px
         row-gap: 23px
+    &__title
+        &_full
+            margin-top: 90px
+            margin-bottom: 70px
+            user-select: none
+            &:hover::after
+                width: 0
     &-item
         border-radius: 10px
         background: #F4F4F4
@@ -29,13 +38,22 @@
                 margin-bottom: 20px
                 .town
                     border-radius: 10px
-                    background: #FDFFB3
+                    background: $second
+                    padding: 10px 15px
+                    position: absolute
+                    top: 20px
+                    left: 20px
+                .theme
+                    border-radius: 10px
+                    background: $second
                     padding: 10px 15px
                     position: absolute
                     top: 20px
                     left: 20px
                 h5
                     margin-right: 25px
+                    font-size: 14px
+                    line-height: 17px
                 div
                     display: flex
                     img
@@ -52,3 +70,45 @@
             grid-column-start: 1
             grid-column-end: 3
         
+.date
+    display: flex
+    margin-bottom: 30px
+    &-item
+        padding: 15px 20px
+        border-width: 1px 1px 1px 1px
+        border-style: solid
+        border-color: #C4C4C4
+        background: #FFFFFF
+        transition: 0.5s all
+        &:first-child
+            border-top-left-radius: 10px
+            border-bottom-left-radius: 10px
+            background: $red
+            h5
+                color: white
+        &:last-child
+            border-top-right-radius: 10px
+            border-bottom-right-radius: 10px
+            cursor: pointer
+            position: relative
+            padding: 0 10px
+            display: flex
+            img
+                width: 33px
+                height: auto
+    &__calendar
+        position: absolute
+        left: 100%
+        border-radius: 10px
+        top: 0
+        max-width: 350px
+        opacity: 0
+        visibility: hidden
+        transition: 0.3s all
+        z-index: 999
+        &_active
+            opacity: 1
+            visibility: visible
+    .react-calendar__month-view__weekdays__weekday
+        display: none
+

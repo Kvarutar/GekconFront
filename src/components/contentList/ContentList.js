@@ -1,19 +1,35 @@
 import { useState, useEffect } from 'react';
-import clock from "./clock_fill.svg";
-import location from "./location_fill.svg"
-import {Link} from "react-router-dom";
 import Spinner from "../spinner/Spinner";
+import 'react-calendar/dist/Calendar.css';
 import "./contentList.sass";
+import ContentItem from "../contentItem/ContentItem";
+import SortPanel from "../../containers/SortPanel";
+import { v4 as uuidv4 } from 'uuid';
+import { useSpring, animated } from '@react-spring/web';
+import Calendar from 'react-calendar';
 
-const ContentList = ({type}) => {
+import calendarIcon from './calendar_fill.svg';
+
+const ContentList = ({type, view, category}) => {
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    const [date, setDate] = useState(new Date());
+    const [isCalendar, setIsCalendar] = useState(false);
+
+    let contentCount;
+    let contentPage = 0;
+
+    function addMonths(date, months) {
+        const dateCopy = new Date(date);
+
+        dateCopy.setMonth(dateCopy.getMonth() + months, 0);
+        
+        return dateCopy;
+    }
 
     useEffect(() => {
-
-        console.log(type);
-
         setLoading(true);
+
         let requestOptions = {
             method: 'GET',
             redirect: 'follow'
@@ -22,73 +38,100 @@ const ContentList = ({type}) => {
         let url;
         
         if (type === "news"){
-            url = "http://localhost:8080/api/v1/news/?page=0&news_per_page=9";
+            contentCount = 9;
+            contentPage = 0;
+            url = `http://localhost:8080/api/v1/news/?page=${contentPage}&news_per_page=${contentCount}`;
+
+            if (category !== "all" && category !== undefined) {
+                url += `&theme=${category}`
+            }
+
+            console.log(url);
         }else if (type === "events"){
-            url = "http://localhost:8080/api/v1/events/?page=0&events_per_page=8";
+            contentCount = 8;
+            contentPage = 0;
+            
+            let end = new Intl.DateTimeFormat('en-US').format(addMonths(date, 1));
+            let start = new Intl.DateTimeFormat('en-US').format(addMonths(date, 0));
+
+            url = `http://localhost:8080/api/v1/events/?page=${contentPage}&events_per_page=${contentCount}&start=${start}&end=${end}`;
         }
 
         fetch(url, requestOptions)
         .then(response => response.json())
         .then(result => setData(result))
-        .then(setLoading(false))
+        .then(() => setLoading(false))
         .catch(error => console.log('error', error));
 
         return () => {
             cleanUpData();
         }
-    }, [])
+    }, [type, view, category, date])
 
     const cleanUpData = () => {
         setData([]);
+        setLoading(true);
+        setIsCalendar(false);
     }
 
-    let classType = type === "news" ? "news" : "events";
+    const themeMap = {
+        "all": "Все",
+        "games": "Игры",
+        "comics": "Комиксы",
+        "films": "Фильмы",
+        "cosplay": "Косплей"     
+    }
 
     const content = data.map(el => {
-
-        let link = "";
-        let rawDate = "";
-
-        let id, dateOfCreation, duration, title, mainUrl, slug, descr, imgUrl, timeDate, address, town, metro;
-
-        if (type === "news"){
-            ({id, dateOfCreation, duration, title, mainUrl, slug} = el);
-            link = `/articles/${slug}`;
-            rawDate = dateOfCreation;
-        }else if (type === "events"){
-            ({id, descr, title, imgUrl, timeDate, address, town, metro, slug} = el);
-            link = `/events/${slug}`;
-            rawDate = timeDate
-        }
-
-        const date = new Date(Date.parse(rawDate)).toLocaleString('default', {month: 'long', day: 'numeric' }),
-              timeBlock = type === "news" ? <div><img src={clock} alt="clock"/><h5>{duration}</h5></div> : <div><h5 className="town">{town}</h5><img src={location} alt="clock"/><h5>{address}</h5></div>
-              
-        let descrBlock = type === "news" ? null : <p className="events-item__text--descr">{descr}</p>;
-        
-        return(
-            <Link to={link} className={`content-item ${classType}-item`} key={id}>
-                <div className={`content-item__img ${classType}-item__img`}>
-                    <img src="https://sun9-34.userapi.com/impg/ZGuJiFBAp-93En3yLK7LWZNPxTGmncHrrtVgbg/hd6uHaUv1zE.jpg?size=1200x752&quality=96&sign=e79799e4b75c839d0ddb1a2232fe5d60&type=album" alt="news image"/>
-                </div>
-                <div className={`content-item__text ${classType}-item__text`}>
-                    <div className={`content-item__text--time ${classType}-item__text--time`}>
-                        <h5>{date}</h5>
-                        {timeBlock}
-                    </div>
-                    <h4 className={`content-item__text--title ${classType}-item__text--title`}>{title}</h4>
-                    {descrBlock}
-                </div>
-            </Link>
-        )
+        return <ContentItem el={el} type={type} key={uuidv4()} themeMap={themeMap}/>
     })
 
-    let endContent = isLoading ? <Spinner/> : content;
+    const [props, api] = useSpring(
+        () => ({
+            from: { opacity: 0 },
+            to: { opacity: 1 },
+        }),
+        []
+    )
+
+    const switchCalendar = () => {
+        setIsCalendar(!isCalendar)
+    }
+
+    const datePanel = (
+        <div className = "date">
+            <div className="date__left date-item">
+                <h5>{date.toLocaleString('default', {month: 'long', year: 'numeric' })}</h5>
+            </div>
+            <div className="date__right date-item">
+                <img src={calendarIcon} alt="calendar" onClick={() => switchCalendar()}/>
+                <Calendar 
+                    view="year" 
+                    className={`date__calendar ${isCalendar ? "date__calendar_active" : "" }`}
+                    onClickMonth={(value) => setNewDate(value)}
+                ></Calendar>
+            </div>
+        </div>
+    )
+
+    function setNewDate(value){
+        setDate(value);
+        setIsCalendar(!isCalendar);
+    }
+
+    let titleText =  type == "news" ? "Новости" : "Мероприятия";
+    let title = view == "mini" ? null : <h1 className="content__title content__title_full">{titleText}</h1>;
+    let endContent = isLoading ? <Spinner/> : <animated.div style={props} className={`content__wrapper ${type}__wrapper`}>{content}</animated.div>;
+    let panel = (type == "news" && view == "full") ?  <SortPanel sortList={themeMap}/> : (type == "events" && view == "full") ? datePanel : null;
+
+    
 
     return(
-        <div className={`content__wrapper ${classType}__wrapper`}>
+        <animated.div style={props}>
+            {title}
+            {panel}
             {endContent}
-        </div>
+        </animated.div>
     )
 }
 

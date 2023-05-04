@@ -1,0 +1,48 @@
+.discussion
+    &__wrapper
+        display: grid
+        grid-template-columns: repeat(3, 1fr)
+        column-gap: 20px
+        row-gap: 23px
+    &-item
+        background: #F3F3F3
+        border-radius: 10px
+        padding: 25px 25px 30px 25px
+        &__top
+            text-decoration: none
+        &__title
+            margin-bottom: 20px
+            display: flex
+            p
+                font-weight: 700
+                margin-right: 10px
+            img
+                max-height: 20px
+                width: auto
+        &__descr
+            margin-bottom: 25px
+            h6
+                max-height: 80px
+                overflow: hidden
+                text-overflow: ellipsis
+                display: -webkit-box
+                -webkit-line-clamp: 4
+                -webkit-box-orient: vertical
+                font-weight: 300
+        &__bottom
+            display: flex
+            justify-content: space-between
+        &__tags
+            display: flex
+            a
+                &:nth-child(1)
+                    margin-right: 10px
+        &__msg
+            display: flex
+            align-items: center
+            p
+                margin-right: 5px
+            img
+                max-width: 17px
+                height: auto
+            

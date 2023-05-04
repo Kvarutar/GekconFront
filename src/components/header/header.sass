@@ -1,3 +1,5 @@
+@import "../../styles/variables"
+    
 .header
     background: #222222
     padding-top: 22px
@@ -13,6 +15,7 @@
         list-style: none
         display: flex
         &-item
+            position: relative
             a
                 text-decoration: none
                 font-style: normal
@@ -22,4 +25,17 @@
                 color: #FFFFFF
             &:not(:first-child)
                 margin-left: 55px
+            &::after
+                content: " "
+                position: absolute
+                border-radius: 10px
+                bottom: 0
+                left: 0
+                width: 0
+                height: 1px
+                background: $red
+                transition: 0.3s all
+            &:hover::after
+                width: 100%
+                
                 

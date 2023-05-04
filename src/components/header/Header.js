@@ -15,16 +15,16 @@ const Header = ({isLogged}) => {
                     <img src={img} alt="logo" className="header__logo"/>
                     <ul className="header__menu">
                         <li className="header__menu-item">
-                            <Link>Лента</Link>
+                            <Link to="/">Лента</Link>
                         </li>
                         <li className="header__menu-item">
-                            <Link>Новости</Link>
+                            <Link to="/news/">Новости</Link>
                         </li>
                         <li className="header__menu-item">
-                            <Link>Мероприятия</Link>
+                            <Link to="/events/" >Мероприятия</Link>
                         </li>
                         <li className="header__menu-item">
-                            <Link>Обсуждения</Link>
+                            <Link to="/discussions/">Обсуждения</Link>
                         </li>
                     </ul>
                     {btn}
