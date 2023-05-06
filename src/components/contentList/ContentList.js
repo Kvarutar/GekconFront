@@ -54,7 +54,13 @@ const ContentList = ({type, view, category}) => {
             let end = new Intl.DateTimeFormat('en-US').format(addMonths(date, 1));
             let start = new Intl.DateTimeFormat('en-US').format(addMonths(date, 0));
 
-            url = `http://localhost:8080/api/v1/events/?page=${contentPage}&events_per_page=${contentCount}&start=${start}&end=${end}`;
+            if(view == "full"){
+                url = `http://localhost:8080/api/v1/events/?page=${contentPage}&events_per_page=${contentCount}&start=${start}&end=${end}`;
+            }else{
+                url = `http://localhost:8080/api/v1/events/?page=${contentPage}&events_per_page=${contentCount}`;
+            }
+            
+            console.log(url);
         }
 
         fetch(url, requestOptions)
