@@ -7,7 +7,7 @@ const Tags = ({tagContent}) => {
     let tagLink = `/discussion/?page=0&discussion_per_page=10&tag=${slug}`
 
     return(
-        <Link to={tagLink} className="tag" key={uuidv4()}>
+        <Link to={tagLink} className="tag">
             <p>#{name}</p>
         </Link>
     )

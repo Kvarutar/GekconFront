@@ -1,4 +1,4 @@
-import settings from "./settings_fill.svg";
+import settings from "./settings.svg";
 import "./feed.sass";
 import ContentList from "../contentList/ContentList";
 import {Link} from "react-router-dom";

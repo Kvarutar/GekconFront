@@ -38,12 +38,12 @@ const DiscussionList = () => {
         let {id, name, slug, descr, tagsList, messagesCount} = el;
         let link = `/discussion/${slug}`; 
         let tags = tagsList.map(tg => {
-            return <Tags tagContent={tg}/>
+            return <Tags tagContent={tg} key={uuidv4()}/>
         })
 
         return(
-            <div className="discussion-item" >
-                <Link to={link} className="discussion-item__top" key={uuidv4()}>
+            <div className="discussion-item" key={uuidv4()}>
+                <Link to={link} className="discussion-item__top">
                     <div className="discussion-item__title">
                         <p>{name}</p>
                         <img src={hot} alt="hot"/>
