@@ -5,12 +5,11 @@ import "./contentList.sass";
 import ContentItem from "../contentItem/ContentItem";
 import SortPanel from "../../containers/SortPanel";
 import { v4 as uuidv4 } from 'uuid';
-import { useSpring, animated } from '@react-spring/web';
 import Calendar from 'react-calendar';
 
 import calendarIcon from './calendar_fill.svg';
 
-const ContentList = ({type, view, category}) => {
+const ContentList = ({type, view, newsCategory}) => {
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [date, setDate] = useState(new Date());
@@ -42,8 +41,8 @@ const ContentList = ({type, view, category}) => {
             contentPage = 0;
             url = `http://localhost:8080/api/v1/news/?page=${contentPage}&news_per_page=${contentCount}`;
 
-            if (category !== "all" && category !== undefined) {
-                url += `&theme=${category}`
+            if (newsCategory !== "all" && newsCategory !== undefined) {
+                url += `&theme=${newsCategory}`
             }
 
             console.log(url);
@@ -72,7 +71,7 @@ const ContentList = ({type, view, category}) => {
         return () => {
             cleanUpData();
         }
-    }, [type, view, category, date])
+    }, [type, view, newsCategory, date])
 
     const cleanUpData = () => {
         setData([]);
@@ -91,14 +90,6 @@ const ContentList = ({type, view, category}) => {
     const content = data.map(el => {
         return <ContentItem el={el} type={type} key={uuidv4()} themeMap={themeMap}/>
     })
-
-    const [props, api] = useSpring(
-        () => ({
-            from: { opacity: 0 },
-            to: { opacity: 1 },
-        }),
-        []
-    )
 
     const switchCalendar = () => {
         setIsCalendar(!isCalendar)
@@ -127,17 +118,17 @@ const ContentList = ({type, view, category}) => {
 
     let titleText =  type == "news" ? "Новости" : "Мероприятия";
     let title = view == "mini" ? null : <h1 className="content__title content__title_full">{titleText}</h1>;
-    let endContent = isLoading ? <Spinner/> : <animated.div style={props} className={`content__wrapper ${type}__wrapper`}>{content}</animated.div>;
-    let panel = (type == "news" && view == "full") ?  <SortPanel sortList={themeMap}/> : (type == "events" && view == "full") ? datePanel : null;
+    let endContent = isLoading ? <Spinner/> : <div className={`content__wrapper ${type}__wrapper`}>{content}</div>;
+    let panel = (type == "news" && view == "full") ?  <SortPanel sortList={themeMap} theme={type}/> : (type == "events" && view == "full") ? datePanel : null;
 
     
 
     return(
-        <animated.div style={props}>
+        <div>
             {title}
             {panel}
             {endContent}
-        </animated.div>
+        </div>
     )
 }
 

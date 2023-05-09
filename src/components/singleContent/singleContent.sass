@@ -1,7 +1,7 @@
+@import "../../styles/variables"
+    
 .article
-    padding-top: 70px
     padding-bottom: 80px
-    max-width: 60%
     &__title
         margin-bottom: 35px
     &__meta
@@ -35,3 +35,64 @@
 .similar
     &__title
         margin-bottom: 50px
+
+.page
+    &-item
+        max-width: calc(100% * 2 / 3)
+
+.event
+    padding-top: 70px
+    &__title
+        margin-bottom: 50px
+    &__promo
+        margin-bottom: 55px
+        position: relative
+        img
+            border-radius: 10px
+            width: 100%
+            max-height: 390px
+            object-fit: cover
+        &--btns
+            display: flex
+            position: absolute
+            left: 30px
+            bottom: 25px
+            &__heart
+                position: relative
+                width: 51px
+                background: $second
+                border-radius: 10px
+                margin-left: 12px
+                transition: 0.3s all
+                &:hover
+                    background: #FBFF51
+                #main-content
+                    position: absolute
+                    top: 53%
+                    left: 50%
+                    transform: translate(-50%, -50%)
+                    background: none
+                    svg
+                        width: 50px
+    &__main
+        display: flex
+        align-items: baseline
+        h4
+            margin-right: 24px
+    &__info
+        display: flex
+        margin-top: 50px
+        &-item
+            display: flex
+            align-items: center
+            padding: 0 40px
+            &:first-child
+                padding-left: 0
+            &:last-child
+                padding-right: 0
+            &:nth-child(2)
+                border-right: 3px solid $red
+                border-left: 3px solid $red
+            img
+                margin-right: 15px
+            

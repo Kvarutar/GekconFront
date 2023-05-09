@@ -8,7 +8,7 @@ import SingleItemContent from "../singleItemContent/SingleItemContent";
 
 
 const SingleContent = ({theme}) => {
-    let [newsData, setData] = useState([]);
+    let [contentData, setData] = useState([]);
     let [isLoading, setLoading] = useState(true);
     let [similarData, setSimilar] = useState([]);
     let { slug } = useParams();
@@ -82,7 +82,7 @@ const SingleContent = ({theme}) => {
         return <ContentItem key={uuidv4()} el={el} type="news" themeMap={themeMap}/>
     })
 
-    let endContent = isLoading ? <Spinner/> : <SingleItemContent data={newsData} itemTheme={theme} />;
+    let endContent = isLoading ? <Spinner/> : <SingleItemContent data={contentData} itemTheme={theme} />;
     let similarContent = theme === "news" ? <div className={`content__wrapper news__wrapper`}>{similar}</div> : null;
     let similarTitle = theme === "news" ? <h2 className="similar__title">Читайте еще</h2> : null;
 

@@ -2,7 +2,7 @@ import settings from "./settings.svg";
 import "./feed.sass";
 import ContentList from "../contentList/ContentList";
 import {Link} from "react-router-dom";
-import DiscussionList from "../discussionList/DiscussionList";
+import DiscussionForFeed from "../discussionForFeed/DiscussionForFeed";
 
 const Feed = ({isLogged}) => {
     //на деплое убрать !
@@ -26,7 +26,7 @@ const Feed = ({isLogged}) => {
             </div>
             <div className="disscussions">
                 <Link to="/discussions/" className="content__title" ><h2>Интересные обсуждения</h2></Link>
-                <DiscussionList/>
+                <DiscussionForFeed/>
             </div>
         </div>
     )

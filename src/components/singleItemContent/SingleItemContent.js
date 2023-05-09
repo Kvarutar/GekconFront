@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import clock from "./clock_fill.svg";
 import group from "./group_fill.svg";
 import location from "./location_fill.svg";
+import {Link} from 'react-router-dom';
 
 const SingleItemContent = ({data, itemTheme}) => {
 
@@ -13,13 +14,14 @@ const SingleItemContent = ({data, itemTheme}) => {
         if (itemTheme === "news"){
             ({author, dateOfCreation, theme, duration, title, mainUrl, slug, content, tags} = data);
         }else if (itemTheme = "events"){
+            console.log(data);
             ({url, descr, title, imgUrl, timeDate, address, peopleCount, town, metro} = data);
         }
+        
+        let result;
 
-        if (content != undefined){
-            let result;
-
-            if (itemTheme === "news"){
+        if (itemTheme === "news"){
+            if (content != undefined){
                 let pageContent = content.map(el => newsContent(el));
 
                 let dateFormatter = new Intl.DateTimeFormat("ru");
@@ -32,7 +34,7 @@ const SingleItemContent = ({data, itemTheme}) => {
                 let time = timeFormatter.format(new Date(dateOfCreation));
 
                 result = (
-                    <div className="article">
+                    <div className="article page-item">
                         <h1 className="article__title">{title}</h1>
                         <div className="article__meta">
                             <div className="article__meta--info">
@@ -47,8 +49,9 @@ const SingleItemContent = ({data, itemTheme}) => {
                         </div>
                     </div>
                 )
-            } else if (itemTheme === "events"){
-
+            }
+        } else if (itemTheme === "events"){
+            if (timeDate != undefined){
                 let timeFormatter = new Intl.DateTimeFormat("ru", {
                     day: "numeric",
                     month: "numeric"
@@ -62,12 +65,12 @@ const SingleItemContent = ({data, itemTheme}) => {
                 let time = timeFormatter1.format(new Date(timeDate));
 
                 result = (
-                    <div className="event">
+                    <div className="event page-item">
                         <h1 className="event__title">{title}</h1>
                         <div className="event__promo">
                             <img src="https://sun9-34.userapi.com/impg/ZGuJiFBAp-93En3yLK7LWZNPxTGmncHrrtVgbg/hd6uHaUv1zE.jpg?size=1200x752&quality=96&sign=e79799e4b75c839d0ddb1a2232fe5d60&type=album" alt="promo image"/>
                             <div className="event__promo--btns">
-                                <div className="btn_yellow">Купить билеты</div>
+                                <Link className="btn_yellow">Купить билеты</Link>
                                 <div className="event__promo--btns__heart">
                                     <Heart/>
                                 </div>
@@ -75,31 +78,34 @@ const SingleItemContent = ({data, itemTheme}) => {
                         </div>
                         <div className="event__main">
                             <h4>Описание:</h4>
-                            <p>{descr}</p>
-                        </div>
-                        <div className="event__info">
-                            <div className="event__info-item">
-                                <img src={clock} alt="clock"/>
-                                <div>
-                                    <h4>{date}</h4>
-                                    <p>{time}</p>
+                            <div>
+                                <p>{descr}</p>
+                                <div className="event__info">
+                                    <div className="event__info-item">
+                                        <img src={clock} alt="clock"/>
+                                        <div>
+                                            <h4>{date}</h4>
+                                            <p>{time}</p>
+                                        </div>
+                                    </div>
+                                    <div className="event__info-item">
+                                        <img src={group} alt="group"/>
+                                        <h4>{peopleCount}</h4>
+                                    </div>
+                                    <div className="event__info-item">
+                                        <img src={location} alt="location"/>
+                                        <h4>{address}</h4>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="event__info-item">
-                                <img src={group} alt="group"/>
-                                <h4>{peopleCount}</h4>
-                            </div>
-                            <div className="event__info-item">
-                                <img src={location} alt="location"/>
-                                <h4>{address}</h4>
-                            </div>
                         </div>
+                        
                     </div>
                 )
             }
-
-            return result;
         }
+
+        return result;
     }
 
     const newsContent = (element) => {

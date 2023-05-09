@@ -3,6 +3,7 @@ import Header from "../../containers/Header";
 import Feed from "../../containers/Feed";
 import ContentList from "../../containers/ContentList";
 import SingleContent from "../singleContent/SingleContent";
+import Discussions from "../discussions/Discussions";
 import "../../styles/buttons.sass";
 import "../../styles/titles.sass";
 import './app.sass';
@@ -19,7 +20,8 @@ function App() {
 					<Route path="/news/:slug" exact element={<SingleContent theme="news"/>}/> 
 					<Route path="/events/:slug" exact element={<SingleContent theme="events"/>}/> 
 					<Route path="/events/" element={<ContentList type="events" view="full"/>}/>
-					<Route path="/discussions/"/>
+					<Route path="/discussions/" element={<Discussions />}/>
+					<Route path="/discussions/:slug"/>
 				</Routes>
 			</div>
 			

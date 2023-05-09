@@ -2,7 +2,8 @@ import {connect} from 'react-redux';
 import ContentList from "../components/contentList/ContentList";
 
 const mapStateToProps = (state) => ({
-    category: state.filter.category
+    newsCategory: state.filter.newsCategory,
+    eventsCategory: state.filter.eventsCategory
 })
 
 export default connect(mapStateToProps)(ContentList)

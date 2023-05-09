@@ -1,3 +1,5 @@
 export const LOG_IN = "LOG_IN";
 export const LOG_OUT = "LOG_OUT";
-export const SET_FILTER = "SET_FILTER";
+export const SET_NEWS_FILTER = "SET_NEWS_FILTER";
+export const SET_EVENTS_FILTER = "SET_EVENTS_FILTER";
+export const SET_DISCUSSION_FILTER = "SET_DISCUSSION_FILTER";

@@ -1,14 +1,18 @@
 import {connect} from 'react-redux';
 import SortPanel from '../components/sortPanel/SortPanel';
 import { bindActionCreators } from 'redux';
-import {setFilter} from "../actions";
+import {setNewsFilter, setDiscussionFilter, setEventsFilter} from "../actions";
 
 const mapStateToProps = (state) => ({
-    category: state.filter.category
+    newsCategory: state.filter.newsCategory,
+    eventsCategory: state.filter.eventsCategory,
+    discussionCategory: state.filter.discussionCategory
 })
 
 const mapDispatchToProps = dispatch => ({
-    setFilter: bindActionCreators(setFilter, dispatch) 
+    setNewsFilter: bindActionCreators(setNewsFilter, dispatch),
+    setEventsFilter: bindActionCreators(setEventsFilter, dispatch),
+    setDiscussionFilter: bindActionCreators(setDiscussionFilter, dispatch) 
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SortPanel)
