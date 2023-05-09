@@ -44,8 +44,6 @@ const ContentList = ({type, view, newsCategory}) => {
             if (newsCategory !== "all" && newsCategory !== undefined) {
                 url += `&theme=${newsCategory}`
             }
-
-            console.log(url);
         }else if (type === "events"){
             contentCount = 8;
             contentPage = 0;
@@ -58,8 +56,6 @@ const ContentList = ({type, view, newsCategory}) => {
             }else{
                 url = `http://localhost:8080/api/v1/events/?page=${contentPage}&events_per_page=${contentCount}`;
             }
-            
-            console.log(url);
         }
 
         fetch(url, requestOptions)

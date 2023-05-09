@@ -1,13 +1,15 @@
 import{
     SET_NEWS_FILTER,
     SET_EVENTS_FILTER,
-    SET_DISCUSSION_FILTER
+    SET_DISCUSSION_FILTER,
+    SET_PROFILE_FILTER
 } from "../constants/ActionTypes";
 
 const initialState = {
     newsCategory: "all",
     eventsCategory: "all",
-    discussionCategory: "all"
+    discussionCategory: "all",
+    profileCategory: "news"
 }
 
 export default function filter(state = initialState, action){
@@ -18,8 +20,13 @@ export default function filter(state = initialState, action){
                 newsCategory: action.creditionals
             }
 
+        case SET_PROFILE_FILTER:
+            return{
+                ...state,
+                profileCategory: action.creditionals
+            }
+
         default:
             return state;
     }
-
 }

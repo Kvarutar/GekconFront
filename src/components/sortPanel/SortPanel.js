@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import "./sortPanel.sass"
 
 const SortPanel = ({sortList, newsCategory, setNewsFilter, discussionCategory, 
-    setDiscussionFilter, eventsCategory, setEventsFilter, theme}) => {
+    setDiscussionFilter, eventsCategory, setEventsFilter, profileCategory, setProfileFilter, theme}) => {
 
     const renderContent = (mapKey, value, setFilter, category) => {
         let classList = category === mapKey ? "sort-item_active" : "";
@@ -33,15 +33,26 @@ const SortPanel = ({sortList, newsCategory, setNewsFilter, discussionCategory,
         let setFilter;
         let category;
 
-        if (theme === "news"){
-            setFilter = setNewsFilter;
-            category = newsCategory;
-        } else if (theme === "events"){
-            setFilter = setEventsFilter;
-            category = eventsCategory;
-        } else if (theme === "discussions"){
-            setFilter = setDiscussionFilter;
-            category = discussionCategory;
+        switch(theme){
+            case "news":
+                setFilter = setNewsFilter;
+                category = newsCategory;
+                break;
+
+            case "events":
+                setFilter = setEventsFilter;
+                category = eventsCategory;
+                break;
+
+            case "discussions":
+                setFilter = setDiscussionFilter;
+                category = discussionCategory;
+                break;
+
+            case "profile":
+                setFilter = setProfileFilter;
+                category = profileCategory;
+                break;
         }
 
         for (let [key, value] of Object.entries(sortList)) {

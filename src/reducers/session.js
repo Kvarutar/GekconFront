@@ -5,9 +5,6 @@ import{
 
 const initialState = {
         isLogged: false,
-        name: "",
-        photoUrl: "",
-        email: ""
     }
 
 export default function session(state = initialState, action){
@@ -17,20 +14,12 @@ export default function session(state = initialState, action){
             return{
                 ...state,
                 isLogged: false,
-                name: "",
-                photoUrl: "",
-                email: ""
             }
 
         case LOG_IN:
-            let {name, photoUrl, email} = action.creditionals;
-            
             return{
                 ...state,
                 isLogged: true,
-                name,
-                photoUrl,
-                email
             }
 
         default:
