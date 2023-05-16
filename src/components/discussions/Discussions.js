@@ -41,7 +41,7 @@ const Discussions = () => {
     //const tagsContent = 
 
     return(
-        <div className="themes">
+        <div className="themes main-block">
             <h1 className="themes__title">Обсуждения</h1>
             <div className="themes__wrapper">
                 <div className="themes__content">

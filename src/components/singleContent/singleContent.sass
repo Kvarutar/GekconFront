@@ -2,13 +2,46 @@
     
 .article
     padding-bottom: 80px
+    &__content
+        display: flex
+        justify-content: space-between
+        &--wrapper
+            max-width: 790px
+            position: relative
+    &__similar
+        position: relative
+    &--btns
+        display: flex
+        position: absolute
+        right: 10px
+        top: 10px
+        height: 41px
+        &__heart
+            position: relative
+            width: 51px
+            background: $second
+            border-radius: 10px
+            margin-left: 12px
+            transition: 0.3s all
+            &:hover
+                background: #FBFF51
+            #main-content
+                position: absolute
+                top: 53%
+                left: 50%
+                transform: translate(-50%, -50%)
+                background: none
+                svg
+                    width: 50px
     &__title
-        margin-bottom: 35px
+        margin-bottom: 25px
+        max-width: 790px
     &__meta
+        max-width: 790px
         display: flex
         justify-content: space-between
         align-items: center
-        margin-bottom: 50px
+        margin-bottom: 40px
         &--info
             display: flex
             h5
@@ -20,6 +53,7 @@
             height: auto
             cursor: pointer
     &__content
+        position: relative
         &-text
             line-height: 28px
         &-img
@@ -33,17 +67,21 @@
                 margin-bottom: 0
 
 .similar
+    position: sticky
+    top: 20px
+    left: 0
+    max-width: 282px
     &__title
-        margin-bottom: 50px
-
-.page
-    &-item
-        max-width: calc(100% * 2 / 3)
+        font-weight: 500
+        margin-bottom: 35px
+    .content-item
+        max-width: 282px
 
 .event
-    padding-top: 70px
     &__title
         margin-bottom: 50px
+    &__content
+        max-width: 790px
     &__promo
         margin-bottom: 55px
         position: relative
@@ -58,7 +96,10 @@
             left: 30px
             bottom: 25px
             &__heart
-                position: relative
+                height: 41px
+                top: 10px
+                right: 10px
+                position: absolute
                 width: 51px
                 background: $second
                 border-radius: 10px

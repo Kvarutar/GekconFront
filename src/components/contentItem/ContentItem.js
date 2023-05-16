@@ -1,13 +1,17 @@
 import clock from "./clock_fill.svg";
-import location from "./location_fill.svg"
+import location from "./location_fill.svg";
 import {Link} from "react-router-dom";
+import {useEffect} from 'react';
 
-const ContentItem = ({el, type, themeMap}) => {
+const ContentItem = ({el, type, themeMap, i, size}) => {
     let link = "";
     let rawDate = "";
 
     let id, dateOfCreation, duration, title, mainUrl, slug, descr, imgUrl, timeDate, address, town, metro, theme;
 
+    useEffect(() => {
+
+    }, [])
 
     if (type === "news"){
         ({id, dateOfCreation, duration, title, mainUrl, slug, theme} = el);
@@ -26,8 +30,8 @@ const ContentItem = ({el, type, themeMap}) => {
     let descrBlock = type === "news" ? null : <p className="events-item__text--descr">{descr}</p>;
     
     return(
-        <Link to={link} className={`content-item ${type}-item`} key={id}>
-            <div className={`content-item__img ${type}-item__img`}>
+        <Link to={link} className={`content-item ${type}-item ${type}-item_${i} ${type}-item__${size}`} key={id}>
+            <div className={`content-item__img ${type}-item__img ${type}-item__img_${size}`}>
                 <img src="https://sun9-34.userapi.com/impg/ZGuJiFBAp-93En3yLK7LWZNPxTGmncHrrtVgbg/hd6uHaUv1zE.jpg?size=1200x752&quality=96&sign=e79799e4b75c839d0ddb1a2232fe5d60&type=album" alt="news image"/>
             </div>
             <div className={`content-item__text ${type}-item__text`}>

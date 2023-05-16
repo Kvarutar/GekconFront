@@ -14,6 +14,8 @@ const SingleContent = ({theme}) => {
     let { slug } = useParams();
     const [isClick, setClick] = useState(false);
 
+    const newsMiniSize = ["469", "232", "295"];
+
     useEffect(() => {
         setLoading(true);
 
@@ -55,7 +57,7 @@ const SingleContent = ({theme}) => {
             redirect: 'follow'
         };
 
-        let url = "http://localhost:8080/api/v1/news/with?page=0&news_per_page=4";
+        let url = "http://localhost:8080/api/v1/news/with?page=0&news_per_page=3";
 
         data.tags.forEach(el => {
             url += `&tags=${el.slug}`; 
@@ -78,19 +80,32 @@ const SingleContent = ({theme}) => {
         "cosplay": "Косплей"     
     }
 
-    const similar = similarData.map(el => {
-        return <ContentItem key={uuidv4()} el={el} type="news" themeMap={themeMap}/>
+    let sizeCopy;
+
+    const similar = similarData.map((el, i) => {
+        if(sizeCopy === undefined || sizeCopy.length === 0){
+            sizeCopy = [...newsMiniSize];
+        }
+        let zise = Math.floor(Math.random() * sizeCopy.length);
+
+        let tmp = sizeCopy[zise];
+        sizeCopy.splice(zise, 1);
+        
+        return <ContentItem key={uuidv4()} el={el} type="news" themeMap={themeMap} i={i} size={tmp}/>
     })
 
-    let endContent = isLoading ? <Spinner/> : <SingleItemContent data={contentData} itemTheme={theme} />;
+    
     let similarContent = theme === "news" ? <div className={`content__wrapper news__wrapper`}>{similar}</div> : null;
-    let similarTitle = theme === "news" ? <h2 className="similar__title">Читайте еще</h2> : null;
+    let similarTitle = theme === "news" ? <h3 className="similar__title">Читайте еще</h3> : null;
+    let similarBlock = (<div className="similar">
+    {similarTitle}
+    {similarContent}
+</div>)
+    let endContent = isLoading ? <Spinner/> : <SingleItemContent data={contentData} itemTheme={theme} similarContent={similarBlock}/>;
 
     return(
-        <div>
+        <div className="main-block">
             {endContent}
-            {similarTitle}
-            {similarContent}
         </div>
     )
 }  

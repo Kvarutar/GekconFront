@@ -1,0 +1,26 @@
+.profile
+    &__top
+        display: flex
+        justify-content: space-between
+        align-items: center
+        margin-bottom: 50px
+        &--settings
+            width: 40px
+            height: auto
+            transform: rotate(0deg)
+            cursor: pointer
+            transition: 0.5s all
+            &:hover
+                transform: rotate(90deg)
+        &--info
+            display: flex
+            align-items: center
+            img
+                max-width: 211px
+                height: 211px
+                object-fit: cover
+                border-radius: 10px
+                margin-right: 20px
+    &__main
+        &--filter
+            margin-bottom: 30px

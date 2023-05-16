@@ -5,7 +5,7 @@ import group from "./group_fill.svg";
 import location from "./location_fill.svg";
 import {Link} from 'react-router-dom';
 
-const SingleItemContent = ({data, itemTheme}) => {
+const SingleItemContent = ({data, itemTheme, similarContent}) => {
 
     const pageContent = () => {
 
@@ -35,6 +35,7 @@ const SingleItemContent = ({data, itemTheme}) => {
 
                 result = (
                     <div className="article page-item">
+                        
                         <h1 className="article__title">{title}</h1>
                         <div className="article__meta">
                             <div className="article__meta--info">
@@ -42,11 +43,22 @@ const SingleItemContent = ({data, itemTheme}) => {
                                 <h5>{time} |</h5>
                                 <h5>{author}</h5>
                             </div>
-                            <Heart></Heart>
                         </div>
                         <div className="article__content">
-                            {pageContent}
+                            <div className="article__content--wrapper">
+                                <div className="article--btns">
+                                    <div className="article--btns__heart">
+                                        <Heart/>
+                                    </div>
+                                </div>
+                                {pageContent}
+                            </div>
+                            <div className="article__similar">
+                                {similarContent}
+                            </div>
                         </div>
+                        
+                        
                     </div>
                 )
             }
@@ -67,41 +79,46 @@ const SingleItemContent = ({data, itemTheme}) => {
                 result = (
                     <div className="event page-item">
                         <h1 className="event__title">{title}</h1>
-                        <div className="event__promo">
-                            <img src="https://sun9-34.userapi.com/impg/ZGuJiFBAp-93En3yLK7LWZNPxTGmncHrrtVgbg/hd6uHaUv1zE.jpg?size=1200x752&quality=96&sign=e79799e4b75c839d0ddb1a2232fe5d60&type=album" alt="promo image"/>
-                            <div className="event__promo--btns">
-                                <Link className="btn_yellow">Купить билеты</Link>
-                                <div className="event__promo--btns__heart">
-                                    <Heart/>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="event__main">
-                            <h4>Описание:</h4>
-                            <div>
-                                <p>{descr}</p>
-                                <div className="event__info">
-                                    <div className="event__info-item">
-                                        <img src={clock} alt="clock"/>
-                                        <div>
-                                            <h4>{date}</h4>
-                                            <p>{time}</p>
+                        <div className="event__content">
+                                <div className="event__wrapper">
+                                    <div className="event__promo">
+                                        <img src="https://sun9-34.userapi.com/impg/ZGuJiFBAp-93En3yLK7LWZNPxTGmncHrrtVgbg/hd6uHaUv1zE.jpg?size=1200x752&quality=96&sign=e79799e4b75c839d0ddb1a2232fe5d60&type=album" alt="promo image"/>
+                                        <div className="event__promo--btns__heart">
+                                            <Heart/>
+                                        </div>
+                                        <div className="event__promo--btns">
+                                            <Link className="btn_yellow">Купить билеты</Link>
                                         </div>
                                     </div>
-                                    <div className="event__info-item">
-                                        <img src={group} alt="group"/>
-                                        <h4>{peopleCount}</h4>
-                                    </div>
-                                    <div className="event__info-item">
-                                        <img src={location} alt="location"/>
-                                        <h4>{address}</h4>
+                                    <div className="event__main">
+                                        <h4>Описание:</h4>
+                                        
+                                        <div>
+                                            <p>{descr}</p>
+                                            <div className="event__info">
+                                                <div className="event__info-item">
+                                                    <img src={clock} alt="clock"/>
+                                                    <div>
+                                                        <h4>{date}</h4>
+                                                        <p>{time}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="event__info-item">
+                                                    <img src={group} alt="group"/>
+                                                    <h4>{peopleCount}</h4>
+                                                </div>
+                                                <div className="event__info-item">
+                                                    <img src={location} alt="location"/>
+                                                    <h4>{address}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                {}
                         </div>
-                        
                     </div>
-                )
+        )
             }
         }
 

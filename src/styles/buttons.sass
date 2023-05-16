@@ -1,6 +1,7 @@
 @import "variables"
-    
+
 .btn
+    user-select: none
     background: $red
     padding: 12px 35px
     border-radius: 8px
@@ -9,14 +10,15 @@
     font-weight: 400
     font-size: 20px
     line-height: 24px
-    color: #FFFFFF
+    color: black
     transition: 0.3s all
     cursor: pointer
     &:hover
-        background: #FF3535
+        background: #28E446
     &:active
-        background: #FF1515
+        background: #00DE23
     &_yellow
+        user-select: none
         background: $second
         text-decoration: none
         font-style: normal
@@ -35,6 +37,7 @@
             background: #FAFF1B
 
 .inpt
+    outline: none
     width: 100%
     box-sizing: border-box
     border: 1px solid #C4C4C4

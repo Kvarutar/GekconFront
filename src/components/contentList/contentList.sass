@@ -3,18 +3,25 @@
 .content
     &__wrapper
         display: grid
-        grid-template-columns: repeat(3, 1fr)
-        column-gap: 21px
-        row-gap: 23px
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr))
+        column-gap: 60px
     &__title
         &_full
-            margin-bottom: 70px
+            margin-bottom: 50px
             user-select: none
             &:hover::after
                 width: 0
+    &__panel
+        margin-bottom: 30px
+        display: flex
+        &--search
+            margin-right: 30px
+            width: 100%
+            display: flex
+        .inpt
+            margin-right: 30px
     &-item
         border-radius: 10px
-        background: #F4F4F4
         text-decoration: none
         position: relative
         &:hover
@@ -22,16 +29,15 @@
                 img
                     transform: scale(1.05)
         &__img
-            max-height: 233px
             overflow: hidden
             border-radius: 10px
             img
-                max-height: 233px
+                height: 100%
                 width: 100%
                 object-fit: cover
                 transition: 0.3s all
         &__text
-            padding: 23px 25px 29px 25px
+            padding: 23px 0px 0px 0px
             &--time
                 display: flex
                 margin-bottom: 20px
@@ -45,7 +51,7 @@
                 .theme
                     border-radius: 10px
                     background: $second
-                    padding: 10px 15px
+                    padding: 7px 14px
                     position: absolute
                     top: 20px
                     left: 20px
@@ -60,8 +66,37 @@
                         height: auto
                         margin-right: 5px
 
+.news
+    &-item
+        margin-bottom: 50px
+        &__img
+            &_232
+                height: 230px
+            &_295
+                height: 290px
+            &_469
+                height: 470px
+            &_360
+                height: 360px
+            &_450
+                height: 450px
+            &_650
+                height: 650px
+        &__232
+            grid-row-end: span 24
+        &__295
+            grid-row-end: span 29
+        &__469
+            grid-row-end: span 42
+        &__360
+            grid-row-end: span 33
+        &__450
+            grid-row-end: span 40
+        &__650
+            grid-row-end: span 55
 .events
     &-item
+        margin-bottom: 50px
         &__text
             &--descr
                 margin-top: 10px
@@ -69,10 +104,22 @@
         &:nth-child(1)
             grid-column-start: 1
             grid-column-end: 3
+        &__img
+            &_360
+                height: 360px
+            &_480
+                height: 480px
+            &_650
+                height: 650px
+        &__360
+            grid-row-end: span 33
+        &__480
+            grid-row-end: span 42
+        &__650
+            grid-row-end: span 51
         
 .date
     display: flex
-    margin-bottom: 30px
     &-item
         padding: 15px 20px
         border-width: 1px 1px 1px 1px
@@ -84,8 +131,6 @@
             border-top-left-radius: 10px
             border-bottom-left-radius: 10px
             background: $red
-            h5
-                color: white
         &:last-child
             border-top-right-radius: 10px
             border-bottom-right-radius: 10px

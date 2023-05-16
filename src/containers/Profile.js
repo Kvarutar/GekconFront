@@ -6,7 +6,6 @@ import { bindActionCreators } from 'redux';
 const mapStateToProps = state => ({
     isLogged: state.session.isLogged,
     userData: state.user,
-    filter: state.filter.profileCategory
 })
 
 // const mapDispatchToProps = dispatch => ({
