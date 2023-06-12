@@ -17,6 +17,12 @@
         background: #28E446
     &:active
         background: #00DE23
+    &_disabled
+        background: #A4A3A3
+        &:hover
+            background: #7a7a7a
+        &:active
+            background: #646363
     &_yellow
         user-select: none
         background: $second
@@ -35,13 +41,15 @@
             background: #FBFF51
         &:active
             background: #FAFF1B
+    &_find
+        margin-left: 30px
 
 .inpt
     outline: none
     width: 100%
     box-sizing: border-box
-    border: 1px solid #C4C4C4
+    border: 1px solid #C4C4C4 !important
     border-radius: 8px
-    font-size: 16px
+    font-size: 16px !important
     padding: 15px 20px
     user-select: none

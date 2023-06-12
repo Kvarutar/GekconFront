@@ -4,7 +4,7 @@ import Header from "../../containers/Header";
 import Feed from "../../containers/Feed";
 import ContentList from "../../containers/ContentList";
 import SingleContent from "../singleContent/SingleContent";
-import Discussions from "../discussions/Discussions";
+import Discussions from "../../containers/Discussion";
 import Profile from "../../containers/Profile"
 import NewNewsForm from "../newNewsForm/NewNewsForm";
 import "../../styles/buttons.sass";

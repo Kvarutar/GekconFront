@@ -20,6 +20,12 @@ export default function filter(state = initialState, action){
                 newsCategory: action.creditionals
             }
 
+        case SET_DISCUSSION_FILTER:
+            return{
+                ...state,
+                discussionCategory: action.creditionals
+            }
+
         case SET_PROFILE_FILTER:
             return{
                 ...state,

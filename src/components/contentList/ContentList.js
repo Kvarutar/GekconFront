@@ -4,18 +4,20 @@ import 'react-calendar/dist/Calendar.css';
 import "./contentList.sass";
 import ContentItem from "../contentItem/ContentItem";
 import { v4 as uuidv4 } from 'uuid';
-import Calendar from 'react-calendar';
+
 import {Link} from 'react-router-dom';
 import SearchPanel from "../searchPanel/SearchPanel";
 
-import calendarIcon from './calendar_fill.svg';
+
 
 const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory, likedEvents, likedTags}) => {
     const [data, setData] = useState([]),
           [isLoading, setLoading] = useState(true),
           [date, setDate] = useState(new Date()),
           [isCalendar, setIsCalendar] = useState(false),
-          [imgSize, setSize] = useState([]);
+          [imgSize, setSize] = useState([]),
+          [searchPrompt, setPrompt] = useState(""),
+          [town, setTown] = useState("");
           
 
     let contentCount;
@@ -50,26 +52,38 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
                 setSize(eventsMaxSize);
             }
         }
-
-        let url;
+        
         let requestOptions = {
             method: 'GET',
             redirect: 'follow'
         };
 
+        fetch(getPath(contentPage), requestOptions)
+            .then(response => response.json())
+            .then(result => setData(result))
+            .then(() => setLoading(false))
+            .catch(error => console.log('error', error));
+
+        return () => {
+            cleanUpData();
+        }
+    }, [type, view, newsCategory, date])
+
+    function getPath(page, name = searchPrompt){
+        let url;
         if(profileData === null){
             contentCount = 9;
             contentCount = 8;
             switch(profileNewsCategory){
                 case "news":
-                    url = `http://localhost:8080/api/v1/news/with?page=${contentPage}&news_per_page=${contentCount}`;
+                    url = `http://localhost:8080/api/v1/news/with?page=${page}&news_per_page=${contentCount}`;
     
                     if (likedTags.length != 0){
                         likedTags.forEach(el => {
                             url += "&tags=" + el;
                         })
                     }else{
-                        url = `http://localhost:8080/api/v1/news/?page=${contentPage}&news_per_page=${contentCount}`
+                        url = `http://localhost:8080/api/v1/news/?page=${page}&news_per_page=${contentCount}`
                     }
                     
                     break;
@@ -88,10 +102,14 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
             if (type === "news"){
                 contentCount = 9;
                 contentPage = 0;
-                url = `http://localhost:8080/api/v1/news/?page=${contentPage}&news_per_page=${contentCount}`;
+                url = `http://localhost:8080/api/v1/news/?page=${page}&news_per_page=${contentCount}`;
     
                 if (newsCategory !== "all" && newsCategory !== undefined) {
                     url += `&theme=${newsCategory}`
+                }
+                
+                if (name !== null || name !== ""){
+                    url += `&name=${name}`
                 }
             }else if (type === "events"){
                 contentCount = 8;
@@ -101,29 +119,57 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
                 let start = new Intl.DateTimeFormat('en-US').format(addMonths(date, 0));
     
                 if(view == "full"){
-                    url = `http://localhost:8080/api/v1/events/?page=${contentPage}&events_per_page=${contentCount}&start=${start}&end=${end}`;
+                    url = `http://localhost:8080/api/v1/events/?page=${page}&events_per_page=${contentCount}&start=${start}&end=${end}`;
                 }else{
-                    url = `http://localhost:8080/api/v1/events/?page=${contentPage}&events_per_page=${contentCount}`;
+                    url = `http://localhost:8080/api/v1/events/?page=${page}&events_per_page=${contentCount}`;
+                }
+
+                if(town !== ""){
+                    url += `&town=${town}`
                 }
             }
         }
 
-        fetch(url, requestOptions)
+        return url
+    }
+
+    function loadMore(){
+        let requestOptions = {
+            method: 'GET',
+            redirect: 'follow'
+        };
+
+        contentPage++;
+        fetch(getPath(contentPage), requestOptions)
             .then(response => response.json())
-            .then(result => setData(result))
+            .then(result => setData([...data, ...result]))
             .then(() => setLoading(false))
             .catch(error => console.log('error', error));
+    }
 
-        return () => {
-            cleanUpData();
-        }
-    }, [type, view, newsCategory, date])
+    function loadByTitle(prompt){
+        console.log(getPath(contentPage, prompt));
+        setPrompt(prompt);
+
+        var requestOptions = {
+            method: 'GET',
+            redirect: 'follow'
+        };
+        
+        fetch(getPath(contentPage, prompt), requestOptions)
+            .then(response => response.json())
+            .then(result => setData([...result]))
+            .then(() => setLoading(false))
+            .catch(error => console.log('error', error));
+    }
 
     const cleanUpData = () => {
         setData([]);
         setLoading(true);
         setIsCalendar(false);
         setSize([]);
+        setPrompt("");
+        setTown("");
     }
 
     const themeMap = {
@@ -132,6 +178,12 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
         "comics": "Комиксы",
         "films": "Фильмы",
         "cosplay": "Косплей"     
+    }
+
+    const eventsThemeMap = {
+        "all": "Все",
+        "town": "Город",
+        "date": "Дата"
     }
 
     let sizeCopy;
@@ -153,21 +205,7 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
         setIsCalendar(!isCalendar)
     }
 
-    const datePanel = (
-        <div className = "date">
-            <div className="date__left date-item">
-                <h5>{date.toLocaleString('default', {month: 'long', year: 'numeric' })}</h5>
-            </div>
-            <div className="date__right date-item">
-                <img src={calendarIcon} alt="calendar" onClick={() => switchCalendar()}/>
-                <Calendar 
-                    view="year" 
-                    className={`date__calendar ${isCalendar ? "date__calendar_active" : "" }`}
-                    onClickMonth={(value) => setNewDate(value)}
-                ></Calendar>
-            </div>
-        </div>
-    )
+    
 
     function setNewDate(value){
         setDate(value);
@@ -177,8 +215,11 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
     let titleText =  type == "news" ? "Новости" : "Мероприятия";
     let title = view == "mini" ? null : <h1 className="content__title content__title_full">{titleText}</h1>;
     let endContent = isLoading ? <Spinner/> : <div className={`content__wrapper ${type}__wrapper`}>{content}</div>;
-    let panel = (type == "news" && view == "full") ?  <SearchPanel themeMap={themeMap} type={type}/> : (type == "events" && view == "full") ? datePanel : null;
+    let panel = (type == "news" && view == "full") ?  <SearchPanel themeMap={themeMap} type={type} onSearch={loadByTitle}/> 
+                : (type == "events" && view == "full") ? <SearchPanel themeMap={eventsThemeMap} type={type} onSearch={loadByTitle} isCalendar={isCalendar} switchCalendar={switchCalendar}  date={date} setNewDate={setNewDate}/>  : null;
+
     let classList = view == "mini" ? "" : "main-block"
+    let moreBtn = (view === "full" && data.length === 9) ? <div className="content__more"><button className="btn" onClick={loadMore}>Больше</button></div> : null;
 
     
     return(
@@ -189,6 +230,7 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
             </div>
             {panel}
             {endContent}
+            {moreBtn}
         </div>
     )
 }

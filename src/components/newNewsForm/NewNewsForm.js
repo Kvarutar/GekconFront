@@ -1,6 +1,19 @@
 import {useState, useEffect} from 'react';
 import slugify from 'react-slugify';
 import { v4 as uuidv4 } from 'uuid';
+import {Link} from 'react-router-dom';
+import Select from '@mui/joy/Select';
+import Option from '@mui/joy/Option';
+import Autocomplete, { createFilterOptions } from '@mui/joy/Autocomplete';
+import AutocompleteOption from '@mui/joy/AutocompleteOption';
+import Chip from '@mui/joy/Chip';
+import Close from '@mui/icons-material/Close';
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import imageCompression from 'browser-image-compression';
+import Add from '@mui/icons-material/Add';
+import "./newNewsForm.sass";
+
+const filter = createFilterOptions();
 
 const NewNewsForm = () => {
     const [title, setTitle] = useState(""),
@@ -11,16 +24,25 @@ const NewNewsForm = () => {
           [content, setContent] = useState([]),
           [tags, setTags] = useState([]),
           [contentText, setText] = useState(""),
-          [txt, setTxt] = useState("");
+          [txt, setTxt] = useState(""),
+          [loadTags, setLoadTags] = useState([]);
 
     let [inputId, setInputId] = useState(0);
     let [imageId, setImageId] = useState(1);
           
     useEffect(() => {
-
+        var requestOptions = {
+            method: 'GET',
+            redirect: 'follow'
+        };
+        
+        fetch("http://localhost:8080/api/v1/news/tags", requestOptions)
+                .then(response => response.json())
+                .then(result => setLoadTags(result))
+                .catch(error => console.log('error', error));
     }, [])
 
-    const onInputHandler = (e, el, type) => {
+    async function onInputHandler (e, el, type){
         let newContent;
         if(type === "text"){
             newContent = {
@@ -28,10 +50,28 @@ const NewNewsForm = () => {
                 text: e.target.value,
             }
         }else if(e.target.files && e.target.files[0]){
+            const options = {
+                maxSizeMB: 1,
+                maxWidthOrHeight: 1920,
+                useWebWorker: true,
+            }
+            
+            let img;
+
+            try {
+                const compressedFile = await imageCompression(e.target.files[0], options);
+                console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+                console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+            
+                img = await new File([compressedFile], `${slugify(translit(title))}_${imageId}.jpg`); // write your own logic
+            } catch (error) {
+                console.log(error);
+            }
+            
             newContent = {
                 ...el,
                 url: URL.createObjectURL(e.target.files[0]),
-                image: e.target.files[0]
+                image: img
             }
         }
 
@@ -53,15 +93,47 @@ const NewNewsForm = () => {
 
         setContent(tmp);
         setInputId(inputId + 1);
-        setImageId(imageId + 1);
+        if (type === "image"){
+            setImageId(imageId + 1);
+        }
+        
     }
 
-    const onWallpaperHandler = (e) => {
+    async function onWallpaperHandler(e){
+        const options = {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+        }
         if(e.target.files && e.target.files[0]){
-            setWallpaper(e.target.files[0])
+            let img;
+            try {
+                const compressedFile = await imageCompression(e.target.files[0], options);
+                console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+                console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+            
+                img = await new File([compressedFile], `${slugify(translit(title))}_0.jpg`);
+                setWallpaper(img) // write your own logic
+            } catch (error) {
+                console.log(error);
+            }
         }
         
     } 
+
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+    
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+    
+        return [year, month, day].join('-');
+    }
 
     const onSendHandler = () => {
         var myHeaders = new Headers();
@@ -73,30 +145,22 @@ const NewNewsForm = () => {
         for (let i = 0; i < content.length; i++){
             formData.append('files', content[i].image);
         }
+
+        let time = formatDate(new Date());
         
         var raw = JSON.stringify({
             "author": "Alexandr Voronchikhin",
-            "dateOfCreation": "2000-25-03",
-            "theme": "games",
-            "duration": "9 min",
+            "dateOfCreation": time.replaceAll(".", "-"),
+            "theme": theme,
+            "duration": `${duration} мин`,
             "title": title,
             "mainUrl": "asdasdasd",
             "slug": slugify(translit(title)),
             "content": content,
-            "tags": [
-                {
-                "name": "Комиксы",
-                "slug": "comics"
-                },
-                {
-                "name": "Джеймс Ванн",
-                "slug": "james-vann"
-                }
-            ],
+            "tags": tags
         });
 
         formData.append('model', raw);
-        console.log(formData);
 
         var requestOptions = {
                 method: 'POST',
@@ -132,12 +196,17 @@ const NewNewsForm = () => {
         if(content.length != 0){
             return content.map(el => {
                 if (el.type === "text"){
-                    return <input key={el.id} className="inpt newnews__form--input" type="text" value={el.text} onInput={(e) => onInputHandler(e, el, "text")}/>
+                    return <textarea 
+                                        key={el.id} 
+                                        className="inpt newnews__form--input" 
+                                        type="text" value={el.text} 
+                                        onInput={(e) => onInputHandler(e, el, "text")}
+                                        />
                 }else{
                     if (el.url === ""){
                         return <input key={el.id} className="inpt newnews__form--image" type="file" onInput={(e) => onInputHandler(e, el, "image")}/>
                     }else{
-                        return <img src={el.url}/>
+                        return <img src={el.url} className="newnews__form--image_selected"/>
                     }
                     
                 }
@@ -151,13 +220,27 @@ const NewNewsForm = () => {
             <h1 className="newnews__title">Создать новость</h1>
             <div className="newnews__wrapper">
                 {/* <form action="" className="newnews__form"> */}
-                    <div className="newnews__form-item">
-                        <h3 className="newnews__form-label">Название новости</h3>
-                        <input type="text" 
-                                className="inpt" 
-                                value={title} 
-                                onInput={(e) => setTitle(e.target.value)}
-                                />
+                    <div className="newnews__form-item newnews__form-item_meta">
+                        <div className="title">
+                            <h3 className="newnews__form-label">Название новости</h3>
+                            <input type="text" 
+                                    className="inpt" 
+                                    value={title} 
+                                    onInput={(e) => setTitle(e.target.value)}
+                                    />
+                            
+                        </div>
+                        <div className="duration">
+                            <h3 className="newnews__form-label">Длительность</h3>
+                            <div>
+                                <input type="number" 
+                                            className="inpt" 
+                                            value={duration} 
+                                            onInput={(e) => setDuration(e.target.value)}
+                                            />
+                                <p>минут</p>
+                            </div>
+                        </div>
                     </div>
                     <div className="newnews__form-item">
                         <h3 className="newnews__form-label">Обложка</h3>
@@ -171,10 +254,99 @@ const NewNewsForm = () => {
                             <button className="btn" onClick={() => onAddContent("image")}>Добавить изображение</button>
                         </div>
                     </div>
-                    <div className="newnews__form-item">
-                        
+                    <div className="newnews__form-item newnews__form-item_bottom">
+                        <div className="theme">
+                            <h3 className="newnews__form-label">Тема</h3>
+                            <Select 
+                                size="lg"
+                                onChange={(event, newValue) => {
+                                    setTheme(newValue);
+                                }}
+                                >
+                                <Option value="games">Игры</Option>
+                                <Option value="comics">Комиксы</Option>
+                                <Option value="films">Фильмы</Option>
+                                <Option value="cosplay">Косплей</Option>
+                            </Select>
+                        </div>
+                        <div className="tags">
+                            <h3 className="newnews__form-label">Теги</h3>
+                                <Autocomplete
+                                    id="tags-default"
+                                    size="lg"
+                                    multiple
+                                    limitTags={2}
+                                    options={loadTags}
+                                    onChange={(event, newValue) => {
+                                        let tmp = [...newValue];
+                                        tmp.map(el => {
+                                            return {
+                                                name: el.name,
+                                                slug: el.slug
+                                            }
+                                        });
+                                        setTags(newValue);
+                                     }}
+                                    getOptionLabel={(option) => {
+                                        // Value selected with enter, right from the input
+                                        if (typeof option === 'string') {
+                                        return option;
+                                        }
+                                        // Add "xxx" option created dynamically
+                                        if (option.inputValue) {
+                                        return option.inputValue;
+                                        }
+                                        // Regular option
+                                        return option.name;
+                                    }}
+                                    filterOptions={(options, params) => {
+                                        const filtered = filter(options, params);
+                                
+                                        const { inputValue } = params;
+                                        // Suggest the creation of a new value
+                                        const isExisting = options.some((option) => inputValue === option.name);
+                                        if (inputValue !== '' && !isExisting) {
+                                            filtered.push({
+                                                inputValue,
+                                                name: `Добавить "${inputValue}"`,
+                                                slug: slugify(translit(inputValue))
+                                            });
+                                        }
+                                
+                                        return filtered;
+                                    }}
+                                    freeSolo
+                                    handleHomeEndKeys
+                                    renderOption={(props, option) => (
+                                        <AutocompleteOption {...props}>
+                                        {option.name?.startsWith('Add "') && (
+                                            <ListItemDecorator>
+                                            <Add />
+                                            </ListItemDecorator>
+                                        )}
+                            
+                                        {option.name}
+                                        </AutocompleteOption>
+                                    )}
+                                    // renderTags={(tags, getTagProps) =>
+                                    //     tags.map((item, index) => (
+                                    //     <Chip
+                                    //         variant="solid"
+                                    //         color="primary"
+                                    //         endDecorator={<Close fontSize="sm" />}
+                                    //         {...getTagProps({ index })}
+                                    //     >
+                                    //         {item.name}
+                                    //     </Chip>
+                                    //     ))
+                                    // }
+                                    />
+                        </div>
                     </div>
-                    <button className="btn" onClick={onSendHandler}>Отправить</button>
+                    <div className="newnews__form--submit">
+                        <Link to="/news/" className="btn btn_disabled">Отменить</Link>
+                        <button className="btn" onClick={onSendHandler}>Отправить</button>
+                    </div>
                 {/* </form> */}
             </div>
         </div>

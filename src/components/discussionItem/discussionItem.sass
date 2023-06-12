@@ -47,13 +47,34 @@
             border-bottom: 1px solid #222222
             display: flex
             justify-content: space-between
+            &--image
+                max-width: 77px
+                height: auto
+                border-radius: 10px
+                margin-bottom: 5px
             &__top
                 text-decoration: none
+                display: flex
+                &--wrapper
+                    margin-left: 25px
+            &__left
+                .pin
+                    max-height: 17px
+                .meta
+                    display: flex
+                    justify-content: space-between
+                    &-item
+                        display: flex
+                        align-items: center
+                        h6
+                            margin-right: 5px
             &__title
                 display: flex
+                align-items: center
+                margin-bottom: 11px
                 p
                     margin-right: 10px
-                    margin-bottom: 11px
+                    
             &__tags
                 display: flex
                 flex-direction: column

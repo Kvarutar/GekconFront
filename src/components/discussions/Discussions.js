@@ -6,9 +6,10 @@ import Tags from "../tags/Tags";
 import DiscussionItem from "../discussionItem/DiscussionItem";
 import TextField from '@mui/material/TextField';
 import "./discussions.sass";
+import SearchPanel from "../searchPanel/SearchPanel";
 
 
-const Discussions = () => {
+const Discussions = ({discussionCategory}) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -39,15 +40,20 @@ const Discussions = () => {
     })
 
     //const tagsContent = 
+    const themeMap = {
+        "all": "Все",
+        "hot": "Обсуждаемое",
+        "new": "Новое", 
+    }
+
 
     return(
         <div className="themes main-block">
             <h1 className="themes__title">Обсуждения</h1>
             <div className="themes__wrapper">
                 <div className="themes__content">
-                    {/* <TextField fullWidth id="outlined-basic" label="Поиск" variant="outlined"/> */}
                     <div className="themes__controlls">
-                        <input type="text" className="themes__input inpt"/>
+                        <SearchPanel themeMap={themeMap} type="discussions"/>
                     </div>
                     {content}
                 </div>
