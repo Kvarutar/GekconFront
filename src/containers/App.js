@@ -1,17 +1,17 @@
 import {connect} from 'react-redux';
-import Profile from "../components/profile/Profile";
+import App from "../components/app/App";
 import { bindActionCreators } from 'redux';
-import {setUserInfo, login, logout, setAccessToken} from "../actions";
+import {setUserInfo, login, setAccessToken, logout} from "../actions";
 
 const mapStateToProps = state => ({
     isLogged: state.session.isLogged,
-    userData: state.user,
 })
 
 const mapDispatchToProps = dispatch => ({
     setUserInfo: bindActionCreators(setUserInfo, dispatch),
-    logout: bindActionCreators(logout, dispatch),
+    login: bindActionCreators(login, dispatch),
     setAccessToken: bindActionCreators(setAccessToken, dispatch),
+    logout: bindActionCreators(logout, dispatch),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

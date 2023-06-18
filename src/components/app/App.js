@@ -14,12 +14,74 @@ import './app.sass';
 import {Route, Routes} from 'react-router-dom';
 
 
-function App() {
+function App({isLogged, setUserInfo, login, setAccessToken, logout}) {
 
 	useEffect(() => {
 		//load user data
-		console.log("update");
+		const token = localStorage.getItem("geckonRefresh");
+		
+		if (token !== null && token !== "null"){
+			var myHeaders = new Headers();
+			myHeaders.append("Content-Type", "application/json");
+
+			var raw = JSON.stringify({
+				"refreshToken": token
+			});
+
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: raw,
+				redirect: 'follow'
+			};
+
+			fetch("http://localhost:8080/api/v1/auth/token", requestOptions)
+				.then(response => response.json())
+				.then(result => {
+					setAccessToken(result.accessToken);
+					return result.accessToken;
+				})
+				.then(token => {
+					if (!isLogged){
+						loadUserData(token);
+					}
+				})
+				.then(() => login())
+				.catch(error => errorHandler());
+		}
 	}, []);
+
+	const loadUserData = (token) => {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", `Bearer ${token}`);
+
+        var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+        };
+
+        fetch("http://localhost:8080/api/v1/person/", requestOptions)
+                .then(response => response.json())
+                .then(result => setUserInfo(result))
+                .catch(error => errorHandler());
+    }
+
+	const errorHandler = () => {
+		logout()
+		setUserInfo({
+            id: "",
+            personName: "",
+            photoUrl: "",
+            role: "",
+            follows: [],
+            followers: [],
+            likedEvents: [],
+            likedTags: [],
+        })
+        setAccessToken("");
+        localStorage.setItem("geckonRefresh", null);
+	}
 
 	return (
 		<div>

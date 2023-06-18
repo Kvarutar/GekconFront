@@ -5,12 +5,12 @@ import "./contentList.sass";
 import ContentItem from "../contentItem/ContentItem";
 import { v4 as uuidv4 } from 'uuid';
 
-import {Link} from 'react-router-dom';
+import {Link, useLinkClickHandler} from 'react-router-dom';
 import SearchPanel from "../../containers/SearchPanel";
 
 
 
-const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory, likedEvents, likedTags, eventsCategory}) => {
+const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory, likedEvents, likedTags, eventsCategory, isLogged}) => {
     const [data, setData] = useState([]),
           [isLoading, setLoading] = useState(true),
           [date, setDate] = useState(new Date()),
@@ -124,7 +124,7 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
                     url = `http://localhost:8080/api/v1/events/?page=${page}&events_per_page=${contentCount}`;
                 }
 
-                console.log(eventsCategory);
+                //console.log(eventsCategory);
 
                 if(eventsCategory !== "all"){
                     url += `&town=${eventsCategory}`
@@ -218,8 +218,32 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
         setIsCalendar(!isCalendar);
     }
 
+    let linkText = "";
+    let linkHref = "";
+    let linkClass = "";
+    if (view === "full"){
+        if (type === "news"){
+            linkText = "новость"
+            linkHref = "/news/new"
+        }else if (type === "events"){
+            linkText = "мероприятие"
+            linkHref = "/event/new"
+        }
+
+        if (!isLogged){
+            linkClass = "btn_disabled";
+        }
+    }
+
+    const linkClickHandler = (e) => {
+        if (!isLogged){
+            e.preventDefault();
+        }
+    }
+    
+
     let titleText =  type == "news" ? "Новости" : "Мероприятия";
-    let title = view == "mini" ? null : <h1 className="content__title content__title_full">{titleText}</h1>;
+    let title = view == "mini" ? null : <div className="content__title--wrapper"><h1 className="content__title content__title_full">{titleText}</h1><Link className={`btn ${linkClass}`} to={linkHref} onClick={(e) => linkClickHandler(e)}>Создать {linkText}</Link></div>;
     let endContent = isLoading ? <Spinner/> : <div className={`content__wrapper ${type}__wrapper`}>{content}</div>;
     let panel = (type == "news" && view == "full") ?  <SearchPanel themeMap={themeMap} type={type} onSearch={loadByTitle}/> 
                 : (type == "events" && view == "full") ? <SearchPanel themeMap={eventsThemeMap} type={type} onSearch={loadByTitle} isCalendar={isCalendar} switchCalendar={switchCalendar}  date={date} setNewDate={setNewDate}/>  : null;

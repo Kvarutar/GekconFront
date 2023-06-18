@@ -9,7 +9,7 @@ import Sheet from '@mui/joy/Sheet';
 
 
 
-const Header = ({id, accessToken, isLogged, setUserInfo, login, setAccessToken, setRefreshToken}) => {
+const Header = ({id, accessToken, isLogged, setUserInfo, login, setAccessToken}) => {
     const [isOpen, setOpen] = useState(false);
     const [userData, setUserData] = useState({
         login: "",
@@ -51,8 +51,7 @@ const Header = ({id, accessToken, isLogged, setUserInfo, login, setAccessToken, 
                 .then(response => response.ok ? response.json() : Promise.reject(response))
                 .then(result => {
                     setAccessToken(result.accessToken);
-                    setRefreshToken(result.refreshToken);
-
+                    localStorage.setItem("geckonRefresh", result.refreshToken);
                     return result.accessToken;
                 })
                 .then(token => loadUserData(token))
@@ -114,11 +113,11 @@ const Header = ({id, accessToken, isLogged, setUserInfo, login, setAccessToken, 
                             <ModalClose
                                 variant="outlined"
                                 sx={{
-                                top: 'calc(-1/4 * var(--IconButton-size))',
-                                right: 'calc(-1/4 * var(--IconButton-size))',
-                                boxShadow: '0 2px 12px 0 rgba(0 0 0 / 0.2)',
-                                borderRadius: '50%',
-                                bgcolor: 'background.body',
+                                    top: 'calc(-1/4 * var(--IconButton-size))',
+                                    right: 'calc(-1/4 * var(--IconButton-size))',
+                                    boxShadow: '0 2px 12px 0 rgba(0 0 0 / 0.2)',
+                                    borderRadius: '50%',
+                                    bgcolor: 'background.body',
                                 }}
                             />
 

@@ -7,6 +7,7 @@ const mapStateToProps = (state) => ({
     profileNewsCategory: state.filter.profileCategory,
     likedEvents: state.user.likedEvents, 
     likedTags: state.user.likedTags,
+    isLogged: state.session.isLogged,
 })
 
 export default connect(mapStateToProps)(ContentList)

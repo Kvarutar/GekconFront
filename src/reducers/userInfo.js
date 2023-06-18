@@ -13,7 +13,6 @@ const initialState = {
         followers: [],
         likedEvents: [],
         likedTags: [],
-        refreshToken: "",
         accessToken: ""
     }
 
@@ -39,12 +38,6 @@ export default function user(state = initialState, action){
             return {
                 ...state,
                 accessToken: action.creditionals
-            }
-
-        case SET_REFRESH_TOKEN:
-            return {
-                ...state,
-                refreshToken: action.creditionals
             }
 
         default:
