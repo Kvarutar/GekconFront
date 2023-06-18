@@ -6,11 +6,11 @@ import ContentItem from "../contentItem/ContentItem";
 import { v4 as uuidv4 } from 'uuid';
 
 import {Link} from 'react-router-dom';
-import SearchPanel from "../searchPanel/SearchPanel";
+import SearchPanel from "../../containers/SearchPanel";
 
 
 
-const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory, likedEvents, likedTags}) => {
+const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory, likedEvents, likedTags, eventsCategory}) => {
     const [data, setData] = useState([]),
           [isLoading, setLoading] = useState(true),
           [date, setDate] = useState(new Date()),
@@ -67,7 +67,7 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
         return () => {
             cleanUpData();
         }
-    }, [type, view, newsCategory, date])
+    }, [type, view, newsCategory, date, eventsCategory])
 
     function getPath(page, name = searchPrompt){
         let url;
@@ -124,8 +124,14 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
                     url = `http://localhost:8080/api/v1/events/?page=${page}&events_per_page=${contentCount}`;
                 }
 
-                if(town !== ""){
-                    url += `&town=${town}`
+                console.log(eventsCategory);
+
+                if(eventsCategory !== "all"){
+                    url += `&town=${eventsCategory}`
+                }
+                if (name !== null || name !== ""){
+                    url += `&name=${name}`
+                    //console.log(name);
                 }
             }
         }

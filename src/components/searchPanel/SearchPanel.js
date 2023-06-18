@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import SortPanel from "../../containers/SortPanel";
 import slugify from 'react-slugify';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,7 +11,7 @@ import close from "./close.svg";
 import Input from '@mui/joy/Input';
 
 
-const SearchPanel = ({themeMap, type, onSearch, isCalendar, switchCalendar, date, setNewDate}) => {
+const SearchPanel = ({themeMap, type, onSearch, isCalendar, switchCalendar, date, setNewDate, eventsCategory, setEventsFilter}) => {
     const [isSearch, setSearch] = useState(false),
           [title, setTitle] = useState(''),
           [towns, setTowns] = useState([]);
@@ -25,14 +25,19 @@ const SearchPanel = ({themeMap, type, onSearch, isCalendar, switchCalendar, date
             
             fetch("http://localhost:8080/api/v1/events/towns", requestOptions)
                 .then(response => response.json())
-                .then(result => setTowns(result.map(el => <Option key={uuidv4()} value={slugify(translit(el))}>{el}</Option>)))
+                .then(result => setTowns(result.map(el => <Option key={uuidv4()} value={el}>{el}</Option>)))
                 .catch(error => console.log('error', error));
             }
-    }, [])
+    }, [type])
 
-    const onBlurHandler = useCallback(() => {
+    const onFocus = useCallback(() => {
         setSearch(true);
     }, [isSearch])
+
+    const onBlur = () => {
+        setSearch(false);
+    }
+    const ref = useOutsideClick(onBlur);
 
     function translit(str){
         let ru=("А-а-Б-б-В-в-Ґ-ґ-Г-г-Д-д-Е-е-Ё-ё-Є-є-Ж-ж-З-з-И-и-І-і-Ї-ї-Й-й-К-к-Л-л-М-м-Н-н-О-о-П-п-Р-р-С-с-Т-т-У-у-Ф-ф-Х-х-Ц-ц-Ч-ч-Ш-ш-Щ-щ-Ъ-ъ-Ы-ы-Ь-ь-Э-э-Ю-ю-Я-я").split("-")   
@@ -54,7 +59,7 @@ const SearchPanel = ({themeMap, type, onSearch, isCalendar, switchCalendar, date
     function onSearchBtn(isClean = false) {
         if(isClean){
             setSearch(false);
-            setTitle("")
+            setTitle("");
             onSearch(slugify(translit("")));
         }else{
             setSearch(false);
@@ -64,19 +69,23 @@ const SearchPanel = ({themeMap, type, onSearch, isCalendar, switchCalendar, date
     }
 
     let searchBtn = isSearch ? <button className="btn btn_find" onClick={() => onSearchBtn()}>Искать</button> : null;
+    let placeHolder = type === 'news' ? "новости" : type === "events" ? "события" : "обсуждения или темы";
 
     return (
         <div className="content__panel search">
             <div className="content__panel--search"
-            onFocus={onBlurHandler}
+            onFocus={onFocus}
+            ref = {ref}
+            
                 >
                 <div className="content__panel--inpt">
                     <input type="text" 
+                            placeholder={`Введите название ${placeHolder}...`}
                             className="inpt" 
                             value={title} 
                             onInput={(e) => setTitle(e.target.value)}
                             />
-                    {isSearch ? <img src={close} className="content__panel--close" onClick={() => onSearchBtn(true)}/> : null}
+                    {title != "" ? <img src={close} className="content__panel--close" onClick={() => onSearchBtn(true)}/> : null}
                 </div>
                 {searchBtn}
             </div>
@@ -90,9 +99,10 @@ const SearchPanel = ({themeMap, type, onSearch, isCalendar, switchCalendar, date
                         className="sort-item"
                         size="lg"
                         variant="solid"
-                        // onChange={(event, newValue) => {
-                        //     setTheme(newValue);
-                        // }}
+                        onChange={(event, newValue) => {
+                            setEventsFilter(newValue);
+                            console.log(eventsCategory);
+                        }}
                         >
                         <Option value="all" key={uuidv4()}>Все города</Option>
                         {towns}
@@ -105,10 +115,30 @@ const SearchPanel = ({themeMap, type, onSearch, isCalendar, switchCalendar, date
                                 onClickMonth={(value) => setNewDate(value)}
                             ></Calendar>
                     </div>
-                </div> :
+                </div> : 
                 <SortPanel sortList={themeMap} theme={type} isCalendar={isCalendar} switchCalendar={switchCalendar} date={date} setNewDate={setNewDate}/>}
         </div>
     )
 }
+
+const useOutsideClick = (callback) => {
+    const ref = useRef();
+  
+    useEffect(() => {
+      const handleClick = (event) => {
+        if (ref.current && !ref.current.contains(event.target)) {
+          callback();
+        }
+      };
+  
+      document.addEventListener('click', handleClick);
+  
+      return () => {
+        document.removeEventListener('click', handleClick);
+      };
+    }, [ref]);
+  
+    return ref;
+};
 
 export default SearchPanel;

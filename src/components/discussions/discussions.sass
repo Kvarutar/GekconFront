@@ -3,7 +3,7 @@
         display: flex
         justify-content: space-between
         .btn
-            padding: 16px 18px
+            //padding: 16px 18px
     &__content
         width: calc( 100% * 2 / 3 )
     &-item
@@ -11,13 +11,29 @@
         &:last-child
             margin-bottom: 0
         &__title
-            margin-bottom: 40px
             a
                 text-decoration: none
                 color: black
+        &__wrapper
+            margin-top: 40px
+        &__btn
+            display: flex
+            justify-content: center
+            margin-top: 5px
     &__title
         margin-bottom: 60px
     &__extra
         h4
             font-weight: 400
             margin-top: 60px
+    &__tags
+        margin-top: 23px
+        &-item
+            display: flex
+            align-items: center
+            margin-bottom: 10px
+            h5
+                margin-left: 10px
+                color: #626262
+            &:last-child
+                margin-bottom: 0

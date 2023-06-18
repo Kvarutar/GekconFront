@@ -7,6 +7,7 @@ import SingleContent from "../singleContent/SingleContent";
 import Discussions from "../../containers/Discussion";
 import Profile from "../../containers/Profile"
 import NewNewsForm from "../newNewsForm/NewNewsForm";
+import Room from "../room/Room";
 import "../../styles/buttons.sass";
 import "../../styles/titles.sass";
 import './app.sass';
@@ -32,7 +33,8 @@ function App() {
 					<Route path="/events/:slug" exact element={<SingleContent theme="events"/>}/> 
 					<Route path="/events/" element={<ContentList type="events" view="full"/>}/>
 					<Route path="/discussions/" element={<Discussions />}/>
-					<Route path="/discussions/:slug"/>
+					<Route path="/discussion/:slug" exact element={<Room/>}/>
+					<Route path="/theme/:slug" exact element={<Discussions type="theme"/>}/>
 					<Route path="/profile/" element={<Profile/>}/>
 				</Routes>
 			</div>

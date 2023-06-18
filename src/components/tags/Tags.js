@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const Tags = ({tagContent}) => {
     let {id, name, slug} = tagContent;
-    let tagLink = `/discussion/?page=0&discussion_per_page=10&tag=${slug}`
+    let tagLink = `/discussion/?tag=${slug}`
 
     return(
         <Link to={tagLink} className="tag">
