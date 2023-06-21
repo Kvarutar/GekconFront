@@ -16,7 +16,7 @@ const DiscussionForFeed = () => {
             redirect: 'follow'
         };
           
-        fetch("http://localhost:8080/api/v1/discussions/?type=hot&page=0&discussion_per_page=9", requestOptions)
+        fetch("https://geckon-api.fly.dev/api/v1/discussions/?type=hot&page=0&discussion_per_page=9", requestOptions)
         .then(response => response.json())
         .then(result => setData(result))
         .then(setLoading(false))

@@ -5,8 +5,23 @@
     margin: 0
     font-family: 'Inter' !important
 
+.root
+    overflow-x: hidden
+
 .container
-    max-width: 1190px
+    max-width: 83%
     margin: 0 auto
 a
     text-decoration: none
+
+@media screen and ( min-width: 1440px )
+    .container
+        max-width: 1190px
+
+@media screen and ( max-width: 840px )
+    .container
+        max-width: 88%
+@media screen and ( max-width: 426px )
+    .container
+        max-width: 94%
+    

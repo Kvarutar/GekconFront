@@ -1,33 +1,27 @@
 import {useState, useEffect} from 'react';
 import slugify from 'react-slugify';
-import { v4 as uuidv4 } from 'uuid';
 import {Link} from 'react-router-dom';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import Autocomplete, { createFilterOptions } from '@mui/joy/Autocomplete';
 import AutocompleteOption from '@mui/joy/AutocompleteOption';
-import Chip from '@mui/joy/Chip';
-import Close from '@mui/icons-material/Close';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import imageCompression from 'browser-image-compression';
 import Add from '@mui/icons-material/Add';
 import { Uploader } from "uploader";
 import { UploadDropzone } from "react-uploader";
-import "./newNewsForm.sass";
+//import "./newNewsForm.sass";
 
 
 const filter = createFilterOptions();
 
-const NewNewsForm = () => {
+const NewDiscussionsForm = () => {
     const [title, setTitle] = useState(""),
           [duration, setDuration] = useState(""),
           [theme, setTheme] = useState(""),
-          [imgUrl, setImgUrl] = useState(""),
           [wallpaper, setWallpaper] = useState(null),
           [content, setContent] = useState([]),
           [tags, setTags] = useState([]),
-          [contentText, setText] = useState(""),
-          [txt, setTxt] = useState(""),
           [loadTags, setLoadTags] = useState([]);
 
     let [inputId, setInputId] = useState(0);
@@ -207,8 +201,6 @@ const NewNewsForm = () => {
         return res;  
     }
 
-    console.log(slugify(translit("Overwatch 2")))
-
     let mainContent = () => {
         if(content.length != 0){
             return content.map(el => {
@@ -236,7 +228,6 @@ const NewNewsForm = () => {
         <div className="newnews main-block">
             <h1 className="newnews__title">Создать новость</h1>
             <div className="newnews__wrapper">
-                {/* <form action="" className="newnews__form"> */}
                     <div className="newnews__form-item newnews__form-item_meta">
                         <div className="title">
                             <h3 className="newnews__form-label">Название новости</h3>
@@ -264,6 +255,10 @@ const NewNewsForm = () => {
                         {wallpaper === null ? 
                         <MyDropzone isWallpaper={true}/> : 
                         <img src={`https://upcdn.io/W142hzu/raw${wallpaper}`} className="newnews__form--image_selected"/>}
+                            
+                        
+                            
+                        
                     </div>
                     <div className="newnews__form-item">
                         <h3 className="newnews__form-label">Основной контент</h3>
@@ -295,7 +290,7 @@ const NewNewsForm = () => {
                                     size="lg"
                                     multiple
                                     limitTags={2}
-                                    options={loadTags}
+                                    options={allTowns}
                                     onChange={(event, newValue) => {
                                         let tmp = [...newValue];
                                         tmp.map(el => {
@@ -304,7 +299,7 @@ const NewNewsForm = () => {
                                                 slug: el.slug
                                             }
                                         });
-                                        setTags(newValue);
+                                        setTown(newValue);
                                      }}
                                     getOptionLabel={(option) => {
                                         // Value selected with enter, right from the input
@@ -347,18 +342,6 @@ const NewNewsForm = () => {
                                         {option.name}
                                         </AutocompleteOption>
                                     )}
-                                    // renderTags={(tags, getTagProps) =>
-                                    //     tags.map((item, index) => (
-                                    //     <Chip
-                                    //         variant="solid"
-                                    //         color="primary"
-                                    //         endDecorator={<Close fontSize="sm" />}
-                                    //         {...getTagProps({ index })}
-                                    //     >
-                                    //         {item.name}
-                                    //     </Chip>
-                                    //     ))
-                                    // }
                                     />
                         </div>
                     </div>
@@ -366,10 +349,9 @@ const NewNewsForm = () => {
                         <Link to="/news/" className="btn btn_disabled">Отменить</Link>
                         <button className="btn" onClick={onSendHandler}>Отправить</button>
                     </div>
-                {/* </form> */}
             </div>
         </div>
     )
 }
 
-export default NewNewsForm;
+export default NewDiscussionsForm;

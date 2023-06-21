@@ -7,10 +7,15 @@
         column-gap: 60px
     &__title
         &_full
-            margin-bottom: 50px
+            margin-bottom: 0 !important
             user-select: none
             &:hover::after
                 width: 0
+        &--wrapper
+            margin-bottom: 50px
+            display: flex
+            justify-content: space-between
+            align-items: center
     &__panel
         display: flex
         &--search
@@ -92,6 +97,12 @@
                 height: 450px
             &_650
                 height: 650px
+            &_200
+                height: 200px
+            &_270
+                height: 270px
+            &_350
+                height: 350px
         &__232
             grid-row-end: span 24
         &__295
@@ -167,3 +178,22 @@
     .react-calendar__month-view__weekdays__weekday
         display: none
 
+@media screen and ( max-width: 560px )
+    .content
+        &-item
+            margin-bottom: 35px
+            &__text
+                &--time
+                    .theme
+                        top: 14px
+                        left: 14px
+
+@media screen and ( max-width: 456px )
+    .events
+        &-item
+            &:nth-child(1)
+                grid-column-start: auto
+                grid-column-end: auto
+        &__wrapper
+            grid-template-columns: auto
+        

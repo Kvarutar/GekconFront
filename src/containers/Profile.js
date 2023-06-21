@@ -6,6 +6,7 @@ import {setUserInfo, login, logout, setAccessToken} from "../actions";
 const mapStateToProps = state => ({
     isLogged: state.session.isLogged,
     userData: state.user,
+    profileCategory: state.filter.profileCategory
 })
 
 const mapDispatchToProps = dispatch => ({

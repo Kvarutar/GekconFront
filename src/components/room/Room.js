@@ -5,9 +5,10 @@ import { over } from "stompjs";
 import group from "./group_300.svg";
 import pin from "./push_300.svg";
 import "./room.sass";
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 var stompClient = null;
-const Room = () => {
+const Room = ({userData}) => {
     const { slug } = useParams();
 	const [data, setData] = useState();
 	const [messages, setMessages] = useState();
@@ -21,7 +22,7 @@ const Room = () => {
 			redirect: 'follow'
 		};
 	
-		fetch(`http://localhost:8080/api/v1/discussions/${slug}`, requestOptions)
+		fetch(`https://geckon-api.fly.dev/api/v1/discussions/${slug}`, requestOptions)
 			.then(response => response.json())
 			.then(result => {
 				let messages = result.messages;
@@ -45,7 +46,7 @@ const Room = () => {
     }, [slug])
     
     const connect = () => {
-		let cusSockJS = new SockJS("http://localhost:8080/geckon-websocket");
+		let cusSockJS = new SockJS("https://geckon-api.fly.dev/geckon-websocket");
 		stompClient = over(cusSockJS);
 		stompClient.connect({}, onConnected, onError);
 	};
@@ -89,29 +90,32 @@ const Room = () => {
 			let chatMessage = {
 				text: message,
 				date: time.replaceAll(".", "-"),
-				personId: "9",
-				personName: "kvarutar",
+				personId: userData.id,
+				personName: userData.personName,
 				themeSlug: slug
 			}
 			stompClient.send(`/app/send`, {}, JSON.stringify(chatMessage));
 		}
 	}
 
+	
+
 	const renderMesseges = () => {
 		if (messages) {
-			return messages.map(el => {
+			let tmp = messages.reverse();
+			return tmp.map(el => {
 				const {personName, date, text, personId, id} = el;
 				let ruFormatDate = new Intl.DateTimeFormat('ru').format(new Date(date));
 		
 				return(
 					<div className="room-item" key={id}>
-						<div className="room-item__img"><div></div></div>
+						<div className="room-item__img"><img src="https://sun9-58.userapi.com/impf/c834202/v834202358/267fc/VeIG15_L8sU.jpg?size=500x500&quality=96&sign=48455b39ea3dbf99fd00a06a27f1a76f&type=album" alt="profile image"/></div>
 						<div className="room-item__content">
 							<div className="room-item__name">
 								<h4>{personName}</h4>
 								<h6>{ruFormatDate}</h6>
 							</div>
-							<h4>{text}</h4>
+							<h4 className="room-item__msg">{text}</h4>
 						</div>
 					</div>
 				)
@@ -130,24 +134,23 @@ const Room = () => {
     return (
 		(!data && !messages) ? null : 
 
-		<div className="room">
+		<div className="room main-block">
 			<div className="room__wrapper">
 				<div className="room__title">
 					<h4>{data.name}</h4>
 					<div className="room__title--buttons">
-						<img src={group} alt="group"/>
+						{/* <img src={group} alt="group"/> */}
 						<img src={pin} alt="pin"/>
 					</div>
 				</div>
 				<div className="room__descr">
 					<h5>{data.descr}</h5>
 				</div>
-				<div className="room__messages">
-
-				</div>
-				<button onClick={() => sendMessage()}>Отправить</button>
+				{/* <button onClick={() => sendMessage()}>Отправить</button> */}
 			</div>
-			{renderMesseges()}
+			<div className="room__messages">
+				{renderMesseges()}
+			</div>
 			<form action="" onSubmit={(e) => submitHandler(e)}>
 				<input className="inpt" value={message} onChange={e => setMessage(e.target.value)} type="text" placeholder="Введите ваше сообщение..."/>
 			</form>

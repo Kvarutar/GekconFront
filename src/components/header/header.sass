@@ -4,12 +4,37 @@
     background: #222222
     padding-top: 15px
     padding-bottom: 15px
+    position: relative
+    .menu__mobile
+        position: absolute
+        top: 0
+        right: -100%
+        display: flex
+        align-items: center
+        flex-direction: column
+        width: 80%
+        background: rgba(34, 34, 34, 0.97)
+        padding: 50px 20px
+        height: 100vh
+        z-index: 9999999999
+        transition: 0.3s all
+        &--close
+            position: absolute
+            filter: invert(1)
+            height: auto
+            width: 37px
+            right: 10px
+            top: 10px
+        &_active
+            right: 0
+            transition: 0.3s all
     a
         text-decoration: none
     &__wrapper
         display: flex
         justify-content: space-between
         align-items: center
+        position: relative
     &__logo
         max-height: 35px
         width: auto
@@ -38,5 +63,37 @@
                 transition: 0.3s all
             &:hover::after
                 width: 100%
-                
-                
+.form
+    &__title
+        margin-bottom: 30px
+        text-align: center
+    &-item
+        margin-bottom: 25px
+    &__meta
+        display: flex
+        justify-content: center
+        margin-bottom: 30px
+    &__btn
+        display: flex
+        justify-content: center
+.modal
+    &__link
+        margin-left: 5px
+        color: #0085FF
+@media screen and ( max-width: 956px )
+    .header
+        &__menu
+            flex-direction: column
+            align-items: center
+            &-item
+                margin-left: 0
+                margin-bottom: 20px
+                &:not(:first-child)
+                    margin-left: 0
+                &:last-child
+                    margin-bottom: 30px
+@media screen and ( max-width: 561px )
+    .header
+        &__logo
+            max-height: 19px
+    

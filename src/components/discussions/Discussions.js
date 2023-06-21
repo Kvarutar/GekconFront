@@ -54,7 +54,7 @@ const Discussions = ({discussionCategory, type, roomsCategory}) => {
             redirect: 'follow'
         };
 
-        let url = "http://localhost:8080/api/v1/discussions/tags";
+        let url = "https://geckon-api.fly.dev/api/v1/discussions/tags";
 
         if (type === "theme"){
             url += `?theme=${slug}`;
@@ -79,15 +79,15 @@ const Discussions = ({discussionCategory, type, roomsCategory}) => {
         let url;
 
         if (type === "theme"){
-            url = `http://localhost:8080/api/v1/discussions/?page=${page}&discussion_per_page=10&theme=${slug}`;
+            url = `https://geckon-api.fly.dev/api/v1/discussions/?page=${page}&discussion_per_page=10&theme=${slug}`;
             if(roomsCategory !== "all"){
                 url += `&type=${roomsCategory}`
             }
         }else{
             if (discussionCategory == "themes"){
-                url = `http://localhost:8080/api/v1/theme/?page=${page}&theme_per_page=5`;
+                url = `https://geckon-api.fly.dev/api/v1/theme/?page=${page}&theme_per_page=5`;
             }else if (discussionCategory == "discussions") {
-                url = `http://localhost:8080/api/v1/discussions/?page=${page}&discussion_per_page=10`;
+                url = `https://geckon-api.fly.dev/api/v1/discussions/?page=${page}&discussion_per_page=10`;
             }
         }
         
@@ -171,7 +171,10 @@ const Discussions = ({discussionCategory, type, roomsCategory}) => {
     return(
         isLoading ? <Spinner/> : 
         <div className="themes main-block">
-            <h1 className="themes__title">{type === "theme" ? themeName : "Обсуждения"}</h1>
+            <div className="themes__title--wrapper">
+                <h1 className="themes__title">{type === "theme" ? themeName : "Обсуждения"}</h1>
+                {/* <button className="btn">Создать обсуждение</button> */}
+            </div>
             <div className="themes__wrapper">
                 <div className="themes__content">
                     <div className="themes__controlls">
@@ -180,7 +183,6 @@ const Discussions = ({discussionCategory, type, roomsCategory}) => {
                     {content()}
                 </div>
                 <div className="themes__extra">
-                    <button className="btn">Создать обсуждение</button>
                     <h4>Популярные тэги</h4>
                     <div className="themes__tags">
                         {tagsContent}

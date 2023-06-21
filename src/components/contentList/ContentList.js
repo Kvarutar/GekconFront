@@ -23,10 +23,17 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
     let contentCount;
     let contentPage = 0;
 
-    const newsMiniSize = ["469", "232", "295"];
-    const newsMaxSize = ["360", "450", "650"];
-    const eventsMiniSize = ["360", "480", "650"];
-    const eventsMaxSize = ["360", "400", "700"];
+    let newsMiniSize = ["469", "232", "295"];
+    let newsMaxSize = ["360", "450", "650"];
+    let eventsMiniSize = ["360", "480", "650"];
+    let eventsMaxSize = ["360", "400", "700"];
+
+    if (document.documentElement.clientWidth <= "561"){
+        newsMiniSize = ["200", "270", "350"];
+        newsMaxSize = ["200", "270", "350"];
+        eventsMiniSize = ["200", "270", "350"];
+        eventsMaxSize = ["200", "270", "350"];
+    }
 
     function addMonths(date, months) {
         const dateCopy = new Date(date);
@@ -76,14 +83,14 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
             contentCount = 8;
             switch(profileNewsCategory){
                 case "news":
-                    url = `http://localhost:8080/api/v1/news/with?page=${page}&news_per_page=${contentCount}`;
+                    url = `https://geckon-api.fly.dev/api/v1/news/with?page=${page}&news_per_page=${contentCount}`;
     
                     if (likedTags.length != 0){
                         likedTags.forEach(el => {
                             url += "&tags=" + el;
                         })
                     }else{
-                        url = `http://localhost:8080/api/v1/news/?page=${page}&news_per_page=${contentCount}`
+                        url = `https://geckon-api.fly.dev/api/v1/news/?page=${page}&news_per_page=${contentCount}`
                     }
                     
                     break;
@@ -102,7 +109,7 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
             if (type === "news"){
                 contentCount = 9;
                 contentPage = 0;
-                url = `http://localhost:8080/api/v1/news/?page=${page}&news_per_page=${contentCount}`;
+                url = `https://geckon-api.fly.dev/api/v1/news/?page=${page}&news_per_page=${contentCount}`;
     
                 if (newsCategory !== "all" && newsCategory !== undefined) {
                     url += `&theme=${newsCategory}`
@@ -119,9 +126,9 @@ const ContentList = ({type, view, newsCategory, profileData, profileNewsCategory
                 let start = new Intl.DateTimeFormat('en-US').format(addMonths(date, 0));
     
                 if(view == "full"){
-                    url = `http://localhost:8080/api/v1/events/?page=${page}&events_per_page=${contentCount}&start=${start}&end=${end}`;
+                    url = `https://geckon-api.fly.dev/api/v1/events/?page=${page}&events_per_page=${contentCount}&start=${start}&end=${end}`;
                 }else{
-                    url = `http://localhost:8080/api/v1/events/?page=${page}&events_per_page=${contentCount}`;
+                    url = `https://geckon-api.fly.dev/api/v1/events/?page=${page}&events_per_page=${contentCount}`;
                 }
 
                 //console.log(eventsCategory);

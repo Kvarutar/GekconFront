@@ -7,7 +7,8 @@ import SingleContent from "../singleContent/SingleContent";
 import Discussions from "../../containers/Discussion";
 import Profile from "../../containers/Profile"
 import NewNewsForm from "../newNewsForm/NewNewsForm";
-import Room from "../room/Room";
+import NewEventsForm from "../newEventsForm/newEventsForm";
+import Room from "../../containers/Room"
 import "../../styles/buttons.sass";
 import "../../styles/titles.sass";
 import './app.sass';
@@ -35,7 +36,7 @@ function App({isLogged, setUserInfo, login, setAccessToken, logout}) {
 				redirect: 'follow'
 			};
 
-			fetch("http://localhost:8080/api/v1/auth/token", requestOptions)
+			fetch("https://geckon-api.fly.dev/api/v1/auth/token", requestOptions)
 				.then(response => response.json())
 				.then(result => {
 					setAccessToken(result.accessToken);
@@ -61,13 +62,13 @@ function App({isLogged, setUserInfo, login, setAccessToken, logout}) {
                 redirect: 'follow'
         };
 
-        fetch("http://localhost:8080/api/v1/person/", requestOptions)
+        fetch("https://geckon-api.fly.dev/api/v1/person/", requestOptions)
                 .then(response => response.json())
                 .then(result => setUserInfo(result))
-                .catch(error => errorHandler());
+                .catch(error => errorHandler(error));
     }
 
-	const errorHandler = () => {
+	const errorHandler = (error) => {
 		logout()
 		setUserInfo({
             id: "",
@@ -81,6 +82,7 @@ function App({isLogged, setUserInfo, login, setAccessToken, logout}) {
         })
         setAccessToken("");
         localStorage.setItem("geckonRefresh", null);
+		console.log(error)
 	}
 
 	return (
@@ -88,14 +90,16 @@ function App({isLogged, setUserInfo, login, setAccessToken, logout}) {
 			<Header/>
 			<div className="container">
 				<Routes>
-					<Route path="/" element={<Feed/>}/>
+					<Route path="/" exact element={<Feed/>}/>
 					<Route path="/news/" element={<ContentList type="news" view="full"/>}/>
 					<Route path="/news/:slug" exact element={<SingleContent theme="news"/>}/> 
 					<Route path="/news/new/" exact element={<NewNewsForm />}/>
 					<Route path="/events/:slug" exact element={<SingleContent theme="events"/>}/> 
 					<Route path="/events/" element={<ContentList type="events" view="full"/>}/>
+					<Route path="/event/new/" element={<NewEventsForm />}/>
 					<Route path="/discussions/" element={<Discussions />}/>
 					<Route path="/discussion/:slug" exact element={<Room/>}/>
+					<Route path="/discussion/new" element={<NewEventsForm />}/>
 					<Route path="/theme/:slug" exact element={<Discussions type="theme"/>}/>
 					<Route path="/profile/" element={<Profile/>}/>
 				</Routes>

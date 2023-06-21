@@ -1,6 +1,8 @@
 @import "variables"
 
 .btn
+    display: inline-block
+    width: fit-content
     user-select: none
     background: $red
     padding: 12px 35px
@@ -53,3 +55,16 @@
     font-size: 16px !important
     padding: 15px 20px
     user-select: none
+
+@media screen and ( max-width: 560px )
+    .btn
+        font-size: 14px
+        padding: 6px 13px
+        &_yellow
+            font-size: 14px
+            padding: 6px 13px
+        &_find
+            margin-left: 12px
+    .inpt
+        font-size: 14px !important
+        padding: 13px

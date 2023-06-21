@@ -14,7 +14,11 @@ const SingleContent = ({theme}) => {
     let { slug } = useParams();
     const [isClick, setClick] = useState(false);
 
-    const newsMiniSize = ["469", "232", "295"];
+    let newsMiniSize = ["469", "232", "295"];
+
+    if (document.documentElement.clientWidth <= "561"){
+        newsMiniSize = ["200", "200", "200"];
+    }
 
     useEffect(() => {
         setLoading(true);
@@ -25,13 +29,13 @@ const SingleContent = ({theme}) => {
         };
 
         if (theme === "news"){
-            fetch(`http://localhost:8080/api/v1/news/${slug}`, requestOptions)
+            fetch(`https://geckon-api.fly.dev/api/v1/news/${slug}`, requestOptions)
             .then(response => response.json())
             .then(result => loadSimilar(result))
             .then(setLoading(false))
             .catch(error => console.log('error', error));
         }else if (theme === "events"){
-            fetch(`http://localhost:8080/api/v1/events/${slug}`, requestOptions)
+            fetch(`https://geckon-api.fly.dev/api/v1/events/${slug}`, requestOptions)
             .then(response => response.json())
             .then(result => setData(result))
             .then(setLoading(false))
@@ -57,7 +61,7 @@ const SingleContent = ({theme}) => {
             redirect: 'follow'
         };
 
-        let url = "http://localhost:8080/api/v1/news/with?page=0&news_per_page=3";
+        let url = "https://geckon-api.fly.dev/api/v1/news/with?page=0&news_per_page=3";
 
         data.tags.forEach(el => {
             url += `&tags=${el.slug}`; 

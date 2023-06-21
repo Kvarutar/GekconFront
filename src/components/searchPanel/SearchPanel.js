@@ -2,13 +2,13 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import SortPanel from "../../containers/SortPanel";
 import slugify from 'react-slugify';
 import { v4 as uuidv4 } from 'uuid';
-import "./searchPanel.sass";
 import calendarIcon from './calendar_fill.svg';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import Calendar from 'react-calendar';
 import close from "./close.svg";
 import Input from '@mui/joy/Input';
+import "./searchPanel.sass";
 
 
 const SearchPanel = ({themeMap, type, onSearch, isCalendar, switchCalendar, date, setNewDate, eventsCategory, setEventsFilter}) => {
@@ -23,7 +23,7 @@ const SearchPanel = ({themeMap, type, onSearch, isCalendar, switchCalendar, date
                 redirect: 'follow'
             };
             
-            fetch("http://localhost:8080/api/v1/events/towns", requestOptions)
+            fetch("https://geckon-api.fly.dev/api/v1/events/towns", requestOptions)
                 .then(response => response.json())
                 .then(result => setTowns(result.map(el => <Option key={uuidv4()} value={el}>{el}</Option>)))
                 .catch(error => console.log('error', error));

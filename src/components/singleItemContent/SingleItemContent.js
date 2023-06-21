@@ -5,7 +5,38 @@ import group from "./group_fill.svg";
 import location from "./location_fill.svg";
 import {Link} from 'react-router-dom';
 
-const SingleItemContent = ({data, itemTheme, similarContent}) => {
+const SingleItemContent = ({data, itemTheme, similarContent, isLogged}) => {
+
+    // const heartHandler = (tags) => {
+    //     const likedTags = [];
+    //     if (itemTheme === "news"){
+    //         for (let i = 0; i < tags.length; i++){
+    //             likedTags.push(tags[i].slug);
+    //         }
+
+    //         var myHeaders = new Headers();
+    //         myHeaders.append("Content-Type", "application/json");
+    //         myHeaders.append("Authorization", `Bearer ${}`);
+
+    //         var raw = JSON.stringify({
+    //             "tags": likedTags
+    //         });
+
+    //         var requestOptions = {
+    //                 method: 'POST',
+    //                 headers: myHeaders,
+    //                 body: raw,
+    //                 redirect: 'follow'
+    //         };
+
+    //         fetch("https://geckon-api.fly.dev/api/v1/person/like", requestOptions)
+    //                 .then(response => response.text())
+    //                 .then(result => console.log(result))
+    //                 .catch(error => console.log('error', error));
+    //     }else{
+
+    //     }
+    // }
 
     const pageContent = () => {
 
@@ -48,11 +79,11 @@ const SingleItemContent = ({data, itemTheme, similarContent}) => {
                         </div>
                         <div className="article__content">
                             <div className="article__content--wrapper">
-                                <img src="https://sun9-34.userapi.com/impg/ZGuJiFBAp-93En3yLK7LWZNPxTGmncHrrtVgbg/hd6uHaUv1zE.jpg?size=1200x752&quality=96&sign=e79799e4b75c839d0ddb1a2232fe5d60&type=album" alt="" className="article__content-img article__content-item"/>
+                                <img src={`https://upcdn.io/W142hzu/raw${mainUrl}`} alt="" className="article__content-img article__content-item"/>
                                 <div className="article--btns">
-                                    <div className="article--btns__heart">
+                                    {isLogged ? <div className="article--btns__heart">
                                         <Heart/>
-                                    </div>
+                                    </div> : null}
                                 </div>
                                 {pageContent}
                             </div>
@@ -85,10 +116,14 @@ const SingleItemContent = ({data, itemTheme, similarContent}) => {
                         <div className="event__content">
                                 <div className="event__wrapper">
                                     <div className="event__promo">
-                                        <img src="https://sun9-34.userapi.com/impg/ZGuJiFBAp-93En3yLK7LWZNPxTGmncHrrtVgbg/hd6uHaUv1zE.jpg?size=1200x752&quality=96&sign=e79799e4b75c839d0ddb1a2232fe5d60&type=album" alt="promo image"/>
+                                        <img src={`https://upcdn.io/W142hzu/raw${imgUrl}`} alt="promo image"/>
+                                        {isLogged ? 
                                         <div className="event__promo--btns__heart">
                                             <Heart/>
                                         </div>
+                                            
+                                         : null}
+                                        
                                         <div className="event__promo--btns">
                                             <Link className="btn_yellow">Купить билеты</Link>
                                         </div>
@@ -108,7 +143,7 @@ const SingleItemContent = ({data, itemTheme, similarContent}) => {
                                                 </div>
                                                 <div className="event__info-item">
                                                     <img src={group} alt="group"/>
-                                                    <h4>{peopleCount}</h4>
+                                                    <h4>{peopleCount} человек</h4>
                                                 </div>
                                                 <div className="event__info-item">
                                                     <img src={location} alt="location"/>
@@ -137,7 +172,7 @@ const SingleItemContent = ({data, itemTheme, similarContent}) => {
             )
         }else if (type === "image"){
             return(
-                <img src="https://sun9-34.userapi.com/impg/ZGuJiFBAp-93En3yLK7LWZNPxTGmncHrrtVgbg/hd6uHaUv1zE.jpg?size=1200x752&quality=96&sign=e79799e4b75c839d0ddb1a2232fe5d60&type=album" className="article__content-img article__content-item" key={uuidv4()}></img>
+                <img src={`https://upcdn.io/W142hzu/raw${url}`} className="article__content-img article__content-item" key={uuidv4()}></img>
             )
         }
     }

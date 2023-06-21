@@ -28,11 +28,13 @@ const ContentItem = ({el, type, themeMap, i, size}) => {
             timeBlock = type === "news" ? <div><h5 className="theme">{theme}</h5><img src={clock} alt="clock"/><h5>{duration}</h5></div> : <div><h5 className="town">{town}</h5><img src={location} alt="clock"/><h5>{address}</h5></div>
             
     let descrBlock = type === "news" ? null : <p className="events-item__text--descr">{descr}</p>;
+
+    let promoImg = type === "news" ? mainUrl : imgUrl;
     
     return(
         <Link to={link} className={`content-item ${type}-item ${type}-item_${i} ${type}-item__${size}`} key={id}>
             <div className={`content-item__img ${type}-item__img ${type}-item__img_${size}`}>
-                <img src="https://sun9-34.userapi.com/impg/ZGuJiFBAp-93En3yLK7LWZNPxTGmncHrrtVgbg/hd6uHaUv1zE.jpg?size=1200x752&quality=96&sign=e79799e4b75c839d0ddb1a2232fe5d60&type=album" alt="news image"/>
+                <img src={`https://upcdn.io/W142hzu/raw${promoImg}`} alt="news image"/>
             </div>
             <div className={`content-item__text ${type}-item__text`}>
                 <div className={`content-item__text--time ${type}-item__text--time`}>
